@@ -157,4 +157,37 @@ public class ResultController {
 
         return new ResponseEntity<>(results, HttpStatus.OK);
     }
+
+    /**
+     * This method is responsible for getting results for all users
+     * method type: GET
+     * base call: http://localhost:8080/api/results/test-results/all
+     * @return a message like this
+     * {
+     *     "results": [
+     *         {
+     *             "guestName": "edi",
+     *             "guestPoints": 102,
+     *             "correctAnswers": 1,
+     *             "test": {
+     *                 "testName": "test1",
+     *                 "testDifficulty": "MEDIUM",
+     *                 "proposedBy": {
+     *                     "usern": "eduard"
+     *                 }
+     *             }
+     *         }
+     *     ]
+     * }
+     */
+    @GetMapping(value = "/test-results/all")
+    public ResponseEntity<?> getAllResults(){
+        final Map<String, List<TestResult>> results = new TreeMap<>();
+        results.put(
+                "results",
+                resultService.getTestResultsByCondition(x-> true)
+        );
+
+        return new ResponseEntity<>(results, HttpStatus.OK);
+    }
 }
