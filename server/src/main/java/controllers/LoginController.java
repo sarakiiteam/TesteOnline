@@ -31,6 +31,21 @@ public class LoginController {
         this.modelChecker = modelChecker;
     }
 
+    /**
+     * This method is responsible for checking if a user has an account
+     * method type: POST
+     * base call: http://localhost:8080/api/user/login
+     * @param message: the input data that is necessary for the call (looks like this)
+         * {
+         *     "username": "user1"
+         *     "password": "password1"
+         * }
+     * @return a message like this
+         * {
+         *     "code": "status code",
+         *     "msg": "message"
+         * }
+     */
     @PostMapping(value = "/login")
     public ResponseEntity<?> authenticateStudent(@RequestBody final AuthenticationMessage message) {
 
@@ -53,8 +68,6 @@ public class LoginController {
                     HttpStatus.NOT_FOUND
             );
         }
-
-
 
         return new ResponseEntity<>(
                 new Message(
