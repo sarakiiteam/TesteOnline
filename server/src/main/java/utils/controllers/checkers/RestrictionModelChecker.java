@@ -38,16 +38,7 @@ public class RestrictionModelChecker implements IModelChecker {
     }
 
     private boolean respectsCondition(final Field field, final Object model) {
-
-        // get filed type
-        final String type = field.getType().getTypeName();
-
-        // process string type
-        if (type.equals(String.class.getName())) {
-            return checkRestrictionsByType(model, field.getName());
-        }
-
-        return true;
+        return checkRestrictionsByType(model, field.getName());
     }
 
     private boolean checkRestrictionsByType(final Object model, final String fieldName) {

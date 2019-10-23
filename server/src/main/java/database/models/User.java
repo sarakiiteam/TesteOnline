@@ -23,7 +23,7 @@ public class User {
     private int userId;
 
     @Column
-    @JsonProperty("passwd")
+    @JsonIgnore
     private String password;
 
     @Column
@@ -69,6 +69,7 @@ public class User {
 
     @Fetch(FetchMode.JOIN)
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Test> tests = new ArrayList<>();
 }
 

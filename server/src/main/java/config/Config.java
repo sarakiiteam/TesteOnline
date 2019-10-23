@@ -6,16 +6,9 @@ import database.store.interfaces.ITestRepository;
 import database.store.interfaces.IUserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import service.impl.LoginService;
-import service.impl.ResultService;
-import service.impl.TestService;
-import service.impl.UserService;
-import service.interfaces.ILoginService;
-import service.interfaces.IResultService;
-import service.interfaces.ITestService;
-import service.interfaces.IUserService;
 import utils.controllers.checkers.IModelChecker;
 import utils.controllers.checkers.RestrictionModelChecker;
+import utils.controllers.restrictions.DifficultyEnumRestriction;
 import utils.controllers.restrictions.IRestriction;
 import utils.controllers.restrictions.StringRestriction;
 import utils.service.IQuestionComparer;
@@ -47,6 +40,7 @@ public class Config {
 
         //config
         restrictionModelChecker.addRestriction(stringRestriction());
+        restrictionModelChecker.addRestriction(nullDifficultyRestriction());
 
 
         return restrictionModelChecker;
@@ -55,5 +49,10 @@ public class Config {
     @Bean
     IRestriction<Object> stringRestriction(){
         return new StringRestriction();
+    }
+
+    @Bean
+    IRestriction<Object> nullDifficultyRestriction(){
+        return new DifficultyEnumRestriction();
     }
 }

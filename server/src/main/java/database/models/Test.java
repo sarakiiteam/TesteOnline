@@ -1,6 +1,7 @@
 package database.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import database.models.enums.Difficulty;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -30,16 +31,19 @@ public class Test {
     @Column(name = "difficulty")
     private Difficulty testDifficulty;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "userId")
+    @JsonProperty("proposedBy")
     private User user;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "test")
     @Fetch(FetchMode.JOIN)
+    @JsonIgnore
     private Set<Question> questions = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "test")
     @Fetch(FetchMode.JOIN)
+    @JsonIgnore
     private Set<TestResult> results = new HashSet<>();
 
     public Test() {
