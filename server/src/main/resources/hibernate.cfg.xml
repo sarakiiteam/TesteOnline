@@ -3,9 +3,9 @@
 <hibernate-configuration>
     <session-factory>
         <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/tests?verifyServerCertificate=false&amp;useSSL=true&amp;serverTimezone=UTC</property>
-        <property name="hibernate.connection.username">root</property>
-        <property name="hibernate.connection.password">9389yety@E</property>
+        <property name="hibernate.connection.url">jdbc:mysql://remotemysql.com:3306/Df56OzrH1R?verifyServerCertificate=false&amp;useSSL=true&amp;serverTimezone=UTC</property>
+        <property name="hibernate.connection.username">Df56OzrH1R</property>
+        <property name="hibernate.connection.password">7DIGWr5FXr</property>
         <!--<property name="hibernate.show_sql">true</property>-->
         <!--<property name="format_sql">true</property>-->
         <property name="hibernate.current_session_context_class">thread</property>
