@@ -4,6 +4,7 @@ import database.models.Question;
 import database.models.Test;
 import javafx.util.Pair;
 import messages.Message;
+import messages.Requests.QuestionMessage;
 import messages.Requests.TestMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -154,4 +155,60 @@ public class TestController {
     }
 
 
+    /**
+     * This method is responsible for adding a test into database
+     * method type: POST
+     * base call: http://localhost:8080/api/tests/testName/questions/add
+     * @param testName: the name of test we want to add the question
+     * @param message: the input data that is necessary for the call (it looks like this)
+            {
+                "username": "username",
+                "question":"cati ani ai daca nu te-ai nascut?",
+                "answer": "0",
+                "points": 100
+            }
+     * @return a message like this
+            {
+                "code": "CREATED",
+                "msg": "Question added successfully"
+            }
+     */
+    @PostMapping(value = "/{testName}/questions/add")
+    public ResponseEntity<?> addQuestionToTest(@PathVariable String testName, @RequestBody final QuestionMessage message) {
+
+        // validate
+        final Pair<Boolean, String> validationResult = modelChecker.isModelValid(message);
+        if (!validationResult.getKey()) {
+            return new ResponseEntity<>(
+                    new Message(
+                            HttpStatus.BAD_REQUEST, validationResult.getValue()
+                    ),
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+
+        // try to add
+        try {
+
+            testService.addQuestion(
+                    testName,
+                    message.getQuestion(), message.getAnswer(), message.getPoints()
+            );
+        } catch (final Exception ex) {
+            return new ResponseEntity<>(
+                    new Message(
+                            HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage()
+                    ),
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
+
+        //return the response
+        return new ResponseEntity<>(
+                new Message(
+                        HttpStatus.CREATED, "Question added successfully"
+                ),
+                HttpStatus.CREATED
+        );
+    }
 }

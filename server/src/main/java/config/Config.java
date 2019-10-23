@@ -10,6 +10,7 @@ import utils.controllers.checkers.IModelChecker;
 import utils.controllers.checkers.RestrictionModelChecker;
 import utils.controllers.restrictions.DifficultyEnumRestriction;
 import utils.controllers.restrictions.IRestriction;
+import utils.controllers.restrictions.NumberRestriction;
 import utils.controllers.restrictions.StringRestriction;
 import utils.service.IQuestionComparer;
 import utils.service.LowerCaseQuestionComparer;
@@ -34,25 +35,31 @@ public class Config {
 
 
     @Bean
-    public IModelChecker modelChecker(){
+    public IModelChecker modelChecker() {
 
         final RestrictionModelChecker restrictionModelChecker = new RestrictionModelChecker();
 
         //config
         restrictionModelChecker.addRestriction(stringRestriction());
         restrictionModelChecker.addRestriction(nullDifficultyRestriction());
+        restrictionModelChecker.addRestriction(integerRestriction());
 
 
         return restrictionModelChecker;
     }
 
     @Bean
-    IRestriction<Object> stringRestriction(){
+    IRestriction<Object> stringRestriction() {
         return new StringRestriction();
     }
 
     @Bean
-    IRestriction<Object> nullDifficultyRestriction(){
+    IRestriction<Object> nullDifficultyRestriction() {
         return new DifficultyEnumRestriction();
+    }
+
+    @Bean
+    IRestriction<Object> integerRestriction() {
+        return new NumberRestriction();
     }
 }
