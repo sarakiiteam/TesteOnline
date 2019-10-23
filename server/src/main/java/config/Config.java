@@ -34,25 +34,4 @@ public class Config {
     public IQuestionComparer questionComparer() {
         return new LowerCaseQuestionComparer();
     }
-
-    @Bean
-    public ILoginService loginService() {
-        return new LoginService(userRepository());
-    }
-
-    @Bean
-    public IUserService userService() {
-        return new UserService(userRepository());
-    }
-
-    @Bean
-    public ITestService testService() {
-        return new TestService(testRepository());
-    }
-
-    @Bean
-    public IResultService resultService(){
-        return new ResultService(
-                testRepository(), questionComparer());
-    }
 }
