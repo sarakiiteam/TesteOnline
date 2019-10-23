@@ -1,4 +1,4 @@
-package utils.controllers.restrictions;
+package utils.controllers;
 
 public interface IRestriction<T> {
 

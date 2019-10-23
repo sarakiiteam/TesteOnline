@@ -1,15 +1,15 @@
 package controllers;
 
-import messages.Answer;
+import javafx.util.Pair;
+import messages.Message;
+import messages.Requests.TestResultMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import service.interfaces.IResultService;
-import utils.controllers.checkers.IModelChecker;
+import utils.controllers.IModelChecker;
 
 import java.util.List;
 import java.util.Map;
@@ -56,5 +56,66 @@ public class ResultController {
         return new ResponseEntity<>(answers, HttpStatus.OK);
     }
 
-    
+
+    /**
+     * This method is responsible for adding a test result into database
+     * method type: POST
+     * base call: http://localhost:8080/api/results/test-results/add
+     * @param message: the input data that is necessary for the call (it looks like this)
+            {
+                "testName": "test1",
+                "guestName":"edi",
+                "answers" : [
+                        {
+                            "questionId" : 1,
+                            "questionAnswer":"mere"
+                        },
+                        {
+                            "questionId" : 2,
+                            "questionAnswer":"mere"
+                        }
+                ]
+            }
+     * @return a message like this
+            {
+            "code": "CREATED",
+            "msg": "Result successfully added"
+            }
+     */
+    @PostMapping(value = "/test-results/add")
+    public ResponseEntity<?> addTestResult(@RequestBody TestResultMessage message) {
+
+        final Pair<Boolean, String> validationResult = modelChecker.isModelValid(message);
+        if (!validationResult.getKey()) {
+            return new ResponseEntity<>(
+                    new Message(
+                            HttpStatus.BAD_REQUEST,
+                            validationResult.getValue() + (message.getAnswers().size() == 0 ? "Field 'answers' missing" : "")
+                    ),
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+
+        try {
+            resultService.addTestResult(
+                    message.getTestName(),
+                    message.getGuestName(), message.getAnswers()
+            );
+        } catch (final Exception ex) {
+            return new ResponseEntity<>(
+                    new Message(
+                            HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage()
+                    ),
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
+
+        return new ResponseEntity<>(
+                new Message(
+                        HttpStatus.CREATED, "Result successfully added"
+                ),
+                HttpStatus.CREATED
+        );
+    }
+
 }

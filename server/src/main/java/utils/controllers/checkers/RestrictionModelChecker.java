@@ -1,8 +1,8 @@
 package utils.controllers.checkers;
 
 import javafx.util.Pair;
-import utils.controllers.restrictions.IRestriction;
-import utils.controllers.restrictions.StringRestriction;
+import utils.controllers.IModelChecker;
+import utils.controllers.IRestriction;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

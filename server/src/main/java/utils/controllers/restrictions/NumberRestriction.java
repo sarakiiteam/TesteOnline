@@ -1,5 +1,7 @@
 package utils.controllers.restrictions;
 
+import utils.controllers.IRestriction;
+
 public class NumberRestriction implements IRestriction<Object> {
     @Override
     public boolean respects(final Object object) {

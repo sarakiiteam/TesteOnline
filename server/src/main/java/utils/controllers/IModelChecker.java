@@ -1,4 +1,4 @@
-package utils.controllers.checkers;
+package utils.controllers;
 
 import javafx.util.Pair;
 

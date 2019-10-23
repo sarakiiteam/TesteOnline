@@ -1,5 +1,7 @@
 package utils.controllers.restrictions;
 
+import utils.controllers.IRestriction;
+
 public class StringRestriction implements IRestriction<Object> {
 
     @Override

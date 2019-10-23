@@ -1,6 +1,7 @@
 package utils.controllers.restrictions;
 
 import database.models.enums.Difficulty;
+import utils.controllers.IRestriction;
 
 public class DifficultyEnumRestriction implements IRestriction<Object> {
     @Override

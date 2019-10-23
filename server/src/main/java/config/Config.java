@@ -6,10 +6,10 @@ import database.store.interfaces.ITestRepository;
 import database.store.interfaces.IUserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import utils.controllers.checkers.IModelChecker;
+import utils.controllers.IModelChecker;
 import utils.controllers.checkers.RestrictionModelChecker;
 import utils.controllers.restrictions.DifficultyEnumRestriction;
-import utils.controllers.restrictions.IRestriction;
+import utils.controllers.IRestriction;
 import utils.controllers.restrictions.NumberRestriction;
 import utils.controllers.restrictions.StringRestriction;
 import utils.service.IQuestionComparer;
@@ -43,7 +43,6 @@ public class Config {
         restrictionModelChecker.addRestriction(stringRestriction());
         restrictionModelChecker.addRestriction(nullDifficultyRestriction());
         restrictionModelChecker.addRestriction(integerRestriction());
-
 
         return restrictionModelChecker;
     }

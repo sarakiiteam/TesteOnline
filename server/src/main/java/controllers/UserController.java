@@ -1,6 +1,5 @@
 package controllers;
 
-import database.store.interfaces.IUserRepository;
 import javafx.util.Pair;
 import messages.Message;
 import messages.Requests.AuthenticationMessage;
@@ -10,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import service.interfaces.IUserService;
-import utils.controllers.checkers.IModelChecker;
+import utils.controllers.IModelChecker;
 
 @RestController
 @RequestMapping("/api/user")

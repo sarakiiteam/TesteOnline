@@ -12,7 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import service.interfaces.ITestService;
-import utils.controllers.checkers.IModelChecker;
+import utils.controllers.IModelChecker;
 
 import java.util.HashMap;
 import java.util.List;

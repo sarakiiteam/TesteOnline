@@ -7,6 +7,7 @@ import database.models.enums.Difficulty;
 import database.store.interfaces.ITestRepository;
 import messages.Answer;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import service.interfaces.IResultService;
 import utils.exceptions.ErrorMessageException;
@@ -46,6 +47,11 @@ public class ResultService implements IResultService {
         final Map<Integer, Question> questionMap = mapQuestionsById(testName);
         // get the test
         final Test test = testOptional.get();
+
+        if(test.getQuestions().size() != answers.size()){
+            throw  new ErrorMessageException(
+                    "You did not answered to all questions", HttpStatus.BAD_REQUEST);
+        }
 
         //calculate the number of points
         int totalScore = 0, correctAnswers = 0;
