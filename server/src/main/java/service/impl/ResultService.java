@@ -35,7 +35,7 @@ public class ResultService implements IResultService {
     }
 
     @Override
-    public void addTestResult
+    public synchronized void addTestResult
             (final String testName,
              final String guestName, final List<Answer> answers) throws ErrorMessageException {
 
@@ -80,7 +80,7 @@ public class ResultService implements IResultService {
     }
 
     @Override
-    public List<String> getAllAvailableAnswers() {
+    public synchronized List<String> getAllAvailableAnswers() {
 
         final Set<String> answers = testRepository
                 .getAll()
@@ -98,7 +98,7 @@ public class ResultService implements IResultService {
     }
 
     @Override
-    public List<TestResult> getTestResultsByCondition(
+    public synchronized List<TestResult> getTestResultsByCondition(
             final Predicate<TestResult> predicate) {
 
         return testRepository.getTestResultsByCondition(predicate);
