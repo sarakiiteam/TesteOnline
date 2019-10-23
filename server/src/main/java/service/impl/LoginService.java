@@ -32,7 +32,7 @@ public class LoginService implements ILoginService {
         );
 
         return userRepository.canLogin(
-                username, password
+                username, encodedPassword
         );
     }
 

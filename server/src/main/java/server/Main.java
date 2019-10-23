@@ -5,6 +5,7 @@ import database.store.interfaces.ITestRepository;
 import database.store.interfaces.IUserRepository;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import service.impl.LoginService;
+import service.impl.UserService;
 
 @SpringBootApplication
 public class Main {
