@@ -6,6 +6,7 @@ import database.models.TestResult;
 import database.models.enums.Difficulty;
 import database.store.interfaces.ITestRepository;
 import messages.Answer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -26,6 +27,7 @@ public class ResultService implements IResultService {
     private final ITestRepository testRepository;
     private final IQuestionComparer questionComparer;
 
+    @Autowired
     public ResultService(
             final ITestRepository testRepository, final IQuestionComparer questionComparer) {
         this.testRepository = testRepository;
@@ -33,7 +35,7 @@ public class ResultService implements IResultService {
     }
 
     @Override
-    public void addTestResult
+    public synchronized void addTestResult
             (final String testName,
              final String guestName, final List<Answer> answers) throws ErrorMessageException {
 
@@ -78,7 +80,7 @@ public class ResultService implements IResultService {
     }
 
     @Override
-    public List<String> getAllAvailableAnswers() {
+    public synchronized List<String> getAllAvailableAnswers() {
 
         final Set<String> answers = testRepository
                 .getAll()
@@ -96,7 +98,7 @@ public class ResultService implements IResultService {
     }
 
     @Override
-    public List<TestResult> getTestResultsByCondition(
+    public synchronized List<TestResult> getTestResultsByCondition(
             final Predicate<TestResult> predicate) {
 
         return testRepository.getTestResultsByCondition(predicate);

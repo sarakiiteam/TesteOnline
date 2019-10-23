@@ -31,7 +31,7 @@ public class TestService implements ITestService {
     }
 
     @Override
-    public void addTest(
+    public synchronized void addTest(
             final String username,
             final String testName, final Difficulty testDifficulty) throws ErrorMessageException {
 
@@ -41,7 +41,7 @@ public class TestService implements ITestService {
     }
 
     @Override
-    public void addQuestion(
+    public synchronized void addQuestion(
             final String testName,
             final String question, final String answer, final int points) throws ErrorMessageException{
 
@@ -71,12 +71,12 @@ public class TestService implements ITestService {
     }
 
     @Override
-    public List<Test> getAllTests() {
+    public synchronized List<Test> getAllTests() {
         return testRepository.getAll();
     }
 
     @Override
-    public List<Test> getFilteredTests(final Predicate<Test> predicate) {
+    public synchronized List<Test> getFilteredTests(final Predicate<Test> predicate) {
         return this
                 .asAbstractRepository(testRepository)
                 .getByCondition(predicate);
