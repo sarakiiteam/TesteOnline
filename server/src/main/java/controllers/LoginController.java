@@ -1,7 +1,7 @@
 package controllers;
 
 import javafx.util.Pair;
-import messages.ErrorMessage;
+import messages.Message;
 import messages.Requests.AuthenticationMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import service.interfaces.ILoginService;
 import utils.controllers.checkers.IModelChecker;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/user")
@@ -40,15 +38,28 @@ public class LoginController {
 
         if (!validationResult.getKey()) {
             return new ResponseEntity<>(
-                    new ErrorMessage(
+                    new Message(
                             HttpStatus.BAD_REQUEST, validationResult.getValue()
                     ),
                     HttpStatus.BAD_REQUEST
             );
         }
 
+        if(!loginService.hasAccount(message.getUsername(), message.getPassword())){
+            return new ResponseEntity<>(
+                    new Message(
+                            HttpStatus.NOT_FOUND,
+                            "Incorrect username or password"),
+                    HttpStatus.NOT_FOUND
+            );
+        }
 
-        return new ResponseEntity<>(HttpStatus.OK);
+
+
+        return new ResponseEntity<>(
+                new Message(
+                        HttpStatus.OK, "User will be logged in"),
+                HttpStatus.OK);
     }
 
 }
