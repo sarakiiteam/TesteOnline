@@ -10,7 +10,6 @@ public class Question {
     private final static int MAX_LENGTH = 256 * 256 * 4;
 
     @Id
-    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int questionId;
 

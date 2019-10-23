@@ -6,6 +6,8 @@ import database.models.TestResult;
 import database.models.enums.Difficulty;
 import database.store.interfaces.ITestRepository;
 import messages.Answer;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Component;
 import service.interfaces.IResultService;
 import utils.exceptions.ErrorMessageException;
 import utils.service.IQuestionComparer;
@@ -14,6 +16,10 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+@Component
+@ComponentScan(
+        basePackages = {"config"}
+)
 public class ResultService implements IResultService {
 
     private final ITestRepository testRepository;
