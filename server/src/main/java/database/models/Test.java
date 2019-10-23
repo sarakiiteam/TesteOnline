@@ -1,6 +1,7 @@
 package database.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import database.models.enums.Difficulty;
 import org.hibernate.annotations.Fetch;
@@ -34,6 +35,7 @@ public class Test {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "userId")
     @JsonProperty("proposedBy")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private User user;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "test")

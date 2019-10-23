@@ -24,6 +24,11 @@ public class Question {
     @Column
     private int points;
 
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "testId")
+    @JsonIgnore
+    private Test test;
+
     public Question(String question, String answer, int points) {
         this.question = question;
         this.answer = answer;
@@ -69,8 +74,4 @@ public class Question {
         this.test = test;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "testId")
-    @JsonIgnore
-    private Test test;
 }

@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.*;
 import service.interfaces.ITestService;
 import utils.controllers.checkers.IModelChecker;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/tests")
@@ -96,7 +98,7 @@ public class TestController {
     /**
      * This method is responsible for getting all tests from database
      * method type: GET
-     * base call: http://localhost:8080/api/tests/all
+     * base call: http://localhost:8080/api/tests/users
      * @return a message like this
         {
             "tests": [
@@ -117,13 +119,51 @@ public class TestController {
             ]
         }
      */
-    @GetMapping(value = "/all")
+    @GetMapping(value = "/users")
     public ResponseEntity<?> getAllTests() {
 
         final Map<String, List<Test>> tests = new TreeMap<>();
         tests.put("tests", testService.getAllTests());
 
         return new ResponseEntity<>(tests, HttpStatus.OK);
+    }
+
+    /**
+     * This method is responsible for getting all tests posted by a specific user
+     * method type: GET
+     * base call: http://localhost:8080/api/tests/users/username
+     * @param username: the user's username
+     * @return a object like this
+     * {
+     *     "tests": [
+     *         {
+     *             "testName": "test",
+     *             "testDifficulty": "MEDIUM",
+     *             "proposedBy": {
+     *                 "usern": "usern"
+     *             }
+     *         }
+     *     ]
+     * }
+     */
+    @GetMapping(value = "/users/{username}")
+    public ResponseEntity<?> getAllTestsPostedByUser(@PathVariable String username) {
+
+        // filter the result
+        final Map<String, List<Test>> userTests = new HashMap<>();
+        userTests.put(
+                "tests",
+                testService.getFilteredTests(
+                        test -> test
+                                .getUser()
+                                .getUsername()
+                                .equals(
+                                        username.toLowerCase()
+                                )
+                ).stream().peek(x -> x.setUser(null)).collect(Collectors.toList())
+        );
+
+        return new ResponseEntity<>(userTests, HttpStatus.OK);
     }
 
     /**
@@ -174,7 +214,8 @@ public class TestController {
             }
      */
     @PostMapping(value = "/{testName}/questions/add")
-    public ResponseEntity<?> addQuestionToTest(@PathVariable String testName, @RequestBody final QuestionMessage message) {
+    public ResponseEntity<?> addQuestionToTest(@PathVariable String testName,
+                                               @RequestBody final QuestionMessage message) {
 
         // validate
         final Pair<Boolean, String> validationResult = modelChecker.isModelValid(message);
