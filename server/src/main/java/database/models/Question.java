@@ -10,7 +10,6 @@ public class Question {
     private final static int MAX_LENGTH = 256 * 256 * 4;
 
     @Id
-    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int questionId;
 
@@ -18,10 +17,16 @@ public class Question {
     private String question;
 
     @Column(length = MAX_LENGTH)
+    @JsonIgnore
     private String answer;
 
     @Column
     private int points;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "testId")
+    @JsonIgnore
+    private Test test;
 
     public Question(String question, String answer, int points) {
         this.question = question;
@@ -68,7 +73,4 @@ public class Question {
         this.test = test;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "testId")
-    private Test test;
 }

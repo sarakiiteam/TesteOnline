@@ -6,10 +6,8 @@ import java.io.Serializable;
 
 public class Answer implements Serializable {
 
-    @JsonProperty("answer")
     private String questionAnswer;
 
-    @JsonProperty("qid")
     private int questionId;
 
     public Answer() {

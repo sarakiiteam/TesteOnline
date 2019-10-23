@@ -6,6 +6,9 @@ import database.models.TestResult;
 import database.models.enums.Difficulty;
 import database.store.interfaces.ITestRepository;
 import messages.Answer;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 import service.interfaces.IResultService;
 import utils.exceptions.ErrorMessageException;
 import utils.service.IQuestionComparer;
@@ -14,6 +17,10 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+@Component
+@ComponentScan(
+        basePackages = {"config"}
+)
 public class ResultService implements IResultService {
 
     private final ITestRepository testRepository;
@@ -33,13 +40,19 @@ public class ResultService implements IResultService {
         // get the test
         final Optional<Test> testOptional = testRepository.getTestByName(testName);
         if (!testOptional.isPresent()) {
-            return;
+            throw new ErrorMessageException(
+                    "Test not found", HttpStatus.NOT_FOUND);
         }
 
         // map the questions by id's so that it will be easy to check the answer's correctness
         final Map<Integer, Question> questionMap = mapQuestionsById(testName);
         // get the test
         final Test test = testOptional.get();
+
+        if (test.getQuestions().size() != answers.size()) {
+            throw new ErrorMessageException(
+                    "You did not answered to all questions", HttpStatus.BAD_REQUEST);
+        }
 
         //calculate the number of points
         int totalScore = 0, correctAnswers = 0;
@@ -75,7 +88,7 @@ public class ResultService implements IResultService {
                 .map(Question::getAnswer)
                 .collect(Collectors.toSet());
 
-        if(answers.isEmpty()){
+        if (answers.isEmpty()) {
             return new ArrayList<>();
         }
 
