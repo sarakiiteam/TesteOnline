@@ -1,5 +1,6 @@
 package controllers;
 
+import javafx.util.Pair;
 import messages.ErrorMessage;
 import messages.Requests.AuthenticationMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,31 +12,36 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import service.interfaces.ILoginService;
+import utils.controllers.checkers.IModelChecker;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/user")
 @ComponentScan(basePackages = {
-        "service"
+        "service", "config"
 })
 public class LoginController {
 
     private final ILoginService loginService;
+    private final IModelChecker modelChecker;
 
     @Autowired
-    public LoginController(final ILoginService loginService){
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+    public LoginController(final ILoginService loginService, final IModelChecker modelChecker) {
         this.loginService = loginService;
+        this.modelChecker = modelChecker;
     }
 
     @PostMapping(value = "/login")
-    public ResponseEntity<?> authenticateStudent(@RequestBody final AuthenticationMessage message){
+    public ResponseEntity<?> authenticateStudent(@RequestBody final AuthenticationMessage message) {
 
-        if(message == null || message.getPassword() == null || message.getUsername() == null
-                || message.getUsername().isEmpty()
-                || message.getPassword().isEmpty()){
+        final Pair<Boolean, String> validationResult = modelChecker.isModelValid(message);
+
+        if (!validationResult.getKey()) {
             return new ResponseEntity<>(
                     new ErrorMessage(
-                            HttpStatus.BAD_REQUEST,
-                            "Required filed missing"
+                            HttpStatus.BAD_REQUEST, validationResult.getValue()
                     ),
                     HttpStatus.BAD_REQUEST
             );

@@ -14,6 +14,10 @@ import service.interfaces.ILoginService;
 import service.interfaces.IResultService;
 import service.interfaces.ITestService;
 import service.interfaces.IUserService;
+import utils.controllers.checkers.IModelChecker;
+import utils.controllers.checkers.RestrictionModelChecker;
+import utils.controllers.restrictions.IRestriction;
+import utils.controllers.restrictions.StringRestriction;
 import utils.service.IQuestionComparer;
 import utils.service.LowerCaseQuestionComparer;
 
@@ -33,5 +37,23 @@ public class Config {
     @Bean
     public IQuestionComparer questionComparer() {
         return new LowerCaseQuestionComparer();
+    }
+
+
+    @Bean
+    public IModelChecker modelChecker(){
+
+        final RestrictionModelChecker restrictionModelChecker = new RestrictionModelChecker();
+
+        //config
+        restrictionModelChecker.addRestriction(stringRestriction());
+
+
+        return restrictionModelChecker;
+    }
+
+    @Bean
+    IRestriction<Object> stringRestriction(){
+        return new StringRestriction();
     }
 }

@@ -1,15 +1,9 @@
 package messages.Requests;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.io.Serializable;
 
 public class AuthenticationMessage  implements Serializable {
-
-    @JsonProperty("usern")
     private String username;
-
-    @JsonProperty("passwd")
     private String password;
 
     public AuthenticationMessage() {
