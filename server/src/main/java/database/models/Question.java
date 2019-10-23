@@ -18,6 +18,7 @@ public class Question {
     private String question;
 
     @Column(length = MAX_LENGTH)
+    @JsonIgnore
     private String answer;
 
     @Column
@@ -70,5 +71,6 @@ public class Question {
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "testId")
+    @JsonIgnore
     private Test test;
 }

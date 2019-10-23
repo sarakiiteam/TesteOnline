@@ -1,5 +1,6 @@
 package controllers;
 
+import database.models.Question;
 import database.models.Test;
 import javafx.util.Pair;
 import messages.Message;
@@ -116,12 +117,41 @@ public class TestController {
         }
      */
     @GetMapping(value = "/all")
-    public ResponseEntity<?> getAllTests(){
+    public ResponseEntity<?> getAllTests() {
 
         final Map<String, List<Test>> tests = new TreeMap<>();
         tests.put("tests", testService.getAllTests());
 
         return new ResponseEntity<>(tests, HttpStatus.OK);
     }
+
+    /**
+     * This method is responsible for getting all questions for a specific test
+     * method type: GET
+     * base call: http://localhost:8080/api/tests/testName/questions
+     * @param testName: the name of the test
+     * @return a message like this
+     * {
+     *     "questions": [
+     *         {
+     *             "question": "ce are ana?",
+     *             "points": 100
+     *         },
+     *         {
+     *             "question": "ce avea ana?",
+     *             "points": 140
+     *         }
+     *     ]
+     * }
+     */
+    @GetMapping(value = "/{testName}/questions")
+    public ResponseEntity<?> getTestQuestions(@PathVariable String testName) {
+
+        final Map<String, List<Question>> questions = new TreeMap<>();
+        questions.put("questions", testService.getQuestionsForTest(testName));
+
+        return new ResponseEntity<>(questions, HttpStatus.OK);
+    }
+
 
 }
