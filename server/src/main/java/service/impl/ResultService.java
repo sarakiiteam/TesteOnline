@@ -40,7 +40,8 @@ public class ResultService implements IResultService {
         // get the test
         final Optional<Test> testOptional = testRepository.getTestByName(testName);
         if (!testOptional.isPresent()) {
-            return;
+            throw new ErrorMessageException(
+                    "Test not found", HttpStatus.NOT_FOUND);
         }
 
         // map the questions by id's so that it will be easy to check the answer's correctness
@@ -48,8 +49,8 @@ public class ResultService implements IResultService {
         // get the test
         final Test test = testOptional.get();
 
-        if(test.getQuestions().size() != answers.size()){
-            throw  new ErrorMessageException(
+        if (test.getQuestions().size() != answers.size()) {
+            throw new ErrorMessageException(
                     "You did not answered to all questions", HttpStatus.BAD_REQUEST);
         }
 
@@ -87,7 +88,7 @@ public class ResultService implements IResultService {
                 .map(Question::getAnswer)
                 .collect(Collectors.toSet());
 
-        if(answers.isEmpty()){
+        if (answers.isEmpty()) {
             return new ArrayList<>();
         }
 
