@@ -1,4 +1,5 @@
 package server;
+import database.models.enums.Difficulty;
 import database.store.impl.TestRepository;
 import database.store.impl.UserRepository;
 import database.store.interfaces.ITestRepository;
@@ -16,8 +17,6 @@ public class Main {
         ITestRepository testRepository = new TestRepository(userRepository);
 
         TestService testService = new TestService(testRepository);
-
-        System.out.println(testService.getAllTests().size());
 
     }
 }

@@ -6,6 +6,8 @@ import database.store.interfaces.ITestRepository;
 import database.store.interfaces.IUserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import utils.service.IQuestionComparer;
+import utils.service.LowerCaseQuestionComparer;
 
 @Configuration
 public class Config {
@@ -20,6 +22,11 @@ public class Config {
         return new TestRepository(
                 userRepository()
         );
+    }
+
+    @Bean
+    public IQuestionComparer questionComparer(){
+        return new LowerCaseQuestionComparer();
     }
 
 }
