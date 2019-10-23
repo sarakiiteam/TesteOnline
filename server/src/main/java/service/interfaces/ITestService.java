@@ -1,5 +1,6 @@
 package service.interfaces;
 
+import database.models.Question;
 import database.models.Test;
 import database.models.enums.Difficulty;
 import utils.exceptions.ErrorMessageException;
@@ -19,6 +20,24 @@ public interface ITestService {
     void addTest(
             final String username,
             final String testName, final Difficulty testDifficulty) throws ErrorMessageException;
+
+    /**
+     * Add a new question to a specific test
+     * @param testName: the name of test
+     * @param question: the text of the question
+     * @param answer: the text of the answer
+     * @param points: the number of points
+     */
+    void addQuestion(
+            final String testName,
+            final String question, final String answer, final int points) throws ErrorMessageException;
+
+    /**
+     * Returns a list of test questions
+     * @param testName: the name of test
+     * @return a list of questions
+     */
+    List<Question> getQuestionsForTest(final String testName);
 
     /**
      * @return a list with all tests from database
