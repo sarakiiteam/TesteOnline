@@ -4,6 +4,7 @@ import database.store.impl.UserRepository;
 import database.store.interfaces.ITestRepository;
 import database.store.interfaces.IUserRepository;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import service.impl.LoginService;
 
 @SpringBootApplication
 public class Main {
@@ -11,6 +12,8 @@ public class Main {
     public static void main(String... args) throws Exception {
         IUserRepository userRepository = new UserRepository();
 
-        System.out.println(userRepository.getAll().size());
+        LoginService loginService = new LoginService(userRepository);
+
+        System.out.println(loginService.hasAccount("eduard", "onu"));
     }
 }
