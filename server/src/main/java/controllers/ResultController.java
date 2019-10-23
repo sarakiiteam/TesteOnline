@@ -1,5 +1,6 @@
 package controllers;
 
+import database.models.TestResult;
 import javafx.util.Pair;
 import messages.Message;
 import messages.Requests.TestResultMessage;
@@ -118,4 +119,42 @@ public class ResultController {
         );
     }
 
+
+
+    /**
+     * This method is responsible for getting results for a specific guest name
+     * method type: GET
+     * base call: http://localhost:8080/api/results/test-results/guestName/all
+     * @param guestName: the guest name
+     * @return a message like this
+     * {
+     *     "results": [
+     *         {
+     *             "guestName": "edi",
+     *             "guestPoints": 102,
+     *             "correctAnswers": 1,
+     *             "test": {
+     *                 "testName": "test1",
+     *                 "testDifficulty": "MEDIUM",
+     *                 "proposedBy": {
+     *                     "usern": "eduard"
+     *                 }
+     *             }
+     *         }
+     *     ]
+     * }
+     */
+    @GetMapping(value = "/test-results/{guestName}/all")
+    public ResponseEntity<?> getResultsForUser(@PathVariable String guestName){
+
+        final Map<String, List<TestResult>> results = new TreeMap<>();
+        results.put(
+                "results",
+                resultService.getTestResultsByCondition(
+                        testResult -> testResult.getGuestName().equals(guestName)
+                )
+        );
+
+        return new ResponseEntity<>(results, HttpStatus.OK);
+    }
 }
