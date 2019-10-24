@@ -7,6 +7,7 @@ import database.models.enums.Difficulty;
 import database.store.interfaces.ITestRepository;
 import messages.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Component
+@Qualifier("resultServiceNonCached")
 @ComponentScan(
         basePackages = {"config"}
 )

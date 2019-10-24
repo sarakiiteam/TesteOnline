@@ -1,11 +1,15 @@
 package config;
 
+import cache.CacheResolver;
+import cache.ICacheResolver;
 import database.store.impl.TestRepository;
 import database.store.impl.UserRepository;
 import database.store.interfaces.ITestRepository;
 import database.store.interfaces.IUserRepository;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import service.interfaces.IResultService;
 import utils.controllers.IModelChecker;
 import utils.controllers.checkers.RestrictionModelChecker;
 import utils.controllers.restrictions.DifficultyEnumRestriction;
@@ -45,6 +49,13 @@ public class Config {
         restrictionModelChecker.addRestriction(integerRestriction());
 
         return restrictionModelChecker;
+    }
+
+    @Bean
+    public ICacheResolver<IResultService> cacheResolverResult(){
+        return  new CacheResolver<>((k, v)->{
+            System.out.println("Cached expired....\nRefreshed cache");
+        });
     }
 
     @Bean
