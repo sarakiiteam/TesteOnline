@@ -27,7 +27,13 @@ public class CacheResolver<T> implements ICacheResolver<T> {
             final Method method,
             final T instance, final Object... args) throws Exception {
 
-        final Cached cached = getCacheAnnotation(method);
+        //get the method from implementation instead of interface
+        //enables that cache annotation to be on method from interface implementation
+        final Cached cached = getCacheAnnotation(
+                instance.getClass().getDeclaredMethod(
+                        method.getName(), method.getParameterTypes()
+                )
+        );
 
         //check if the method is not cacheable
         if (cached == null) {
