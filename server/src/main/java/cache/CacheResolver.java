@@ -42,7 +42,6 @@ public class CacheResolver<T> implements ICacheResolver<T> {
 
         // if the cache is invalid than restore the value
         if (!isCacheValid(method, cached, instance)) {
-
             //old value
             final Object old = localCache.get(
                     cacheKey(instance, method)
