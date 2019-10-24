@@ -6,6 +6,7 @@ import database.store.impl.TestRepository;
 import database.store.impl.UserRepository;
 import database.store.interfaces.ITestRepository;
 import database.store.interfaces.IUserRepository;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import service.interfaces.IResultService;

@@ -5,6 +5,7 @@ import javafx.util.Pair;
 import messages.Message;
 import messages.Requests.TestResultMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class ResultController {
     @Autowired
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public ResultController(
-            final IResultService resultService, final IModelChecker modelChecker) {
+            @Qualifier("resultServiceCached") final IResultService resultService, final IModelChecker modelChecker) {
 
         this.resultService = resultService;
         this.modelChecker = modelChecker;

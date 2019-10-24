@@ -1,11 +1,13 @@
 package service.cached;
 
 import cache.ICacheResolver;
+import cache.annotations.Cacheable;
 import cache.annotations.Cached;
 import cache.proxies.ProxyCacheBuilder;
 import database.models.TestResult;
 import messages.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 import service.interfaces.IResultService;
@@ -15,6 +17,8 @@ import java.util.List;
 import java.util.function.Predicate;
 
 @Component
+@Cacheable
+@Qualifier("resultServiceCached")
 @ComponentScan(
         basePackages = {"services", "config"}
 )
@@ -24,8 +28,10 @@ public class TestResultServiceCached extends ProxyCacheBuilder<IResultService> i
 
     @Autowired
     public TestResultServiceCached(
-            final ICacheResolver<IResultService> cacheResolver, final IResultService resultService) {
+            final ICacheResolver<IResultService> cacheResolver,
+            @Qualifier("resultServiceNonCached") final IResultService resultService) {
         super(cacheResolver);
+        setCacheable(this);
         this.resultService = resultService;
     }
 
