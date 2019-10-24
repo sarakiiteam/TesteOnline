@@ -15,11 +15,13 @@ public class CacheResolver<T> implements ICacheResolver<T> {
 
     public CacheResolver(final BiConsumer<Object, Object> consumer) {
         this.consumer = consumer;
+        System.out.println("created!!!");
     }
 
     @Override
     public synchronized void resetCache() {
         localCache.clear();
+        consumer.accept(null, null);
     }
 
     @Override

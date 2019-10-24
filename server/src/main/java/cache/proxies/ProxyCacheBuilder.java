@@ -6,8 +6,8 @@ import java.lang.reflect.Proxy;
 
 public abstract class ProxyCacheBuilder<T> implements ICacheableProxy<T> {
 
-    private T cacheable;
     private final ICacheResolver<T> cacheResolver;
+    private T cacheable;
 
     protected ProxyCacheBuilder(final ICacheResolver<T> cacheResolver) {
         this.cacheResolver = cacheResolver;
@@ -23,7 +23,11 @@ public abstract class ProxyCacheBuilder<T> implements ICacheableProxy<T> {
         );
     }
 
-    protected void setCacheable(T cacheable) {
+    protected void refreshCache() {
+        cacheResolver.resetCache();
+    }
+
+    protected void setProxySource(T cacheable) {
         this.cacheable = cacheable;
     }
 }

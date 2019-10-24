@@ -30,8 +30,9 @@ public class TestResultServiceCached extends ProxyCacheBuilder<IResultService> i
     public TestResultServiceCached(
             final ICacheResolver<IResultService> cacheResolver,
             @Qualifier("resultServiceNonCached") final IResultService resultService) {
+
         super(cacheResolver);
-        setCacheable(this);
+        setProxySource(this);
         this.resultService = resultService;
     }
 
