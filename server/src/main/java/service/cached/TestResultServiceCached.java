@@ -45,7 +45,7 @@ public class TestResultServiceCached extends ProxyCacheBuilder<IResultService> i
     }
 
     @Override
-    @Cached(cacheTime = 1000)
+    @Cached(cacheTime = 60 * 60 * 24)
     public List<String> getAllAvailableAnswers() {
         return resultService.getAllAvailableAnswers();
     }

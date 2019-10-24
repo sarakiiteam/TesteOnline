@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import service.interfaces.IResultService;
 import utils.controllers.IModelChecker;
+import utils.controllers.injection.CacheableChecker;
 
 import java.util.List;
 import java.util.Map;
@@ -30,23 +31,25 @@ public class ResultController {
     @Autowired
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public ResultController(
-            @Qualifier("resultServiceCached") final IResultService resultService, final IModelChecker modelChecker) {
+            final IModelChecker modelChecker,
+            @Qualifier("resultServiceCached") final IResultService resultService) {
 
-        this.resultService = resultService;
         this.modelChecker = modelChecker;
+        this.resultService = CacheableChecker.asCacheable(resultService);
     }
 
     /**
      * This method is responsible for getting all answers existent in database
      * method type: GET
      * base call: http://localhost:8080/api/results/available
+     *
      * @return a message like this
      * {
-     *     "answers": [
-     *         "0",
-     *         "mere",
-     *         "pere"
-     *     ]
+     * "answers": [
+     * "0",
+     * "mere",
+     * "pere"
+     * ]
      * }
      */
     @GetMapping(value = "/available")
@@ -63,26 +66,27 @@ public class ResultController {
      * This method is responsible for adding a test result into database
      * method type: POST
      * base call: http://localhost:8080/api/results/test-results/add
+     *
      * @param message: the input data that is necessary for the call (it looks like this)
-            {
-                "testName": "test1",
-                "guestName":"edi",
-                "answers" : [
-                        {
-                            "questionId" : 1,
-                            "questionAnswer":"mere"
-                        },
-                        {
-                            "questionId" : 2,
-                            "questionAnswer":"mere"
-                        }
-                ]
-            }
+     *                 {
+     *                 "testName": "test1",
+     *                 "guestName":"edi",
+     *                 "answers" : [
+     *                 {
+     *                 "questionId" : 1,
+     *                 "questionAnswer":"mere"
+     *                 },
+     *                 {
+     *                 "questionId" : 2,
+     *                 "questionAnswer":"mere"
+     *                 }
+     *                 ]
+     *                 }
      * @return a message like this
-            {
-            "code": "CREATED",
-            "msg": "Result successfully added"
-            }
+     * {
+     * "code": "CREATED",
+     * "msg": "Result successfully added"
+     * }
      */
     @PostMapping(value = "/test-results/add")
     public ResponseEntity<?> addTestResult(@RequestBody TestResultMessage message) {
@@ -121,32 +125,32 @@ public class ResultController {
     }
 
 
-
     /**
      * This method is responsible for getting results for a specific guest name
      * method type: GET
      * base call: http://localhost:8080/api/results/test-results/guestName/all
+     *
      * @param guestName: the guest name
      * @return a message like this
      * {
-     *     "results": [
-     *         {
-     *             "guestName": "edi",
-     *             "guestPoints": 102,
-     *             "correctAnswers": 1,
-     *             "test": {
-     *                 "testName": "test1",
-     *                 "testDifficulty": "MEDIUM",
-     *                 "proposedBy": {
-     *                     "usern": "eduard"
-     *                 }
-     *             }
-     *         }
-     *     ]
+     * "results": [
+     * {
+     * "guestName": "edi",
+     * "guestPoints": 102,
+     * "correctAnswers": 1,
+     * "test": {
+     * "testName": "test1",
+     * "testDifficulty": "MEDIUM",
+     * "proposedBy": {
+     * "usern": "eduard"
+     * }
+     * }
+     * }
+     * ]
      * }
      */
     @GetMapping(value = "/test-results/{guestName}/all")
-    public ResponseEntity<?> getResultsForUser(@PathVariable String guestName){
+    public ResponseEntity<?> getResultsForUser(@PathVariable String guestName) {
 
         final Map<String, List<TestResult>> results = new TreeMap<>();
         results.put(
@@ -163,30 +167,31 @@ public class ResultController {
      * This method is responsible for getting results for all users
      * method type: GET
      * base call: http://localhost:8080/api/results/test-results/all
+     *
      * @return a message like this
      * {
-     *     "results": [
-     *         {
-     *             "guestName": "edi",
-     *             "guestPoints": 102,
-     *             "correctAnswers": 1,
-     *             "test": {
-     *                 "testName": "test1",
-     *                 "testDifficulty": "MEDIUM",
-     *                 "proposedBy": {
-     *                     "usern": "eduard"
-     *                 }
-     *             }
-     *         }
-     *     ]
+     * "results": [
+     * {
+     * "guestName": "edi",
+     * "guestPoints": 102,
+     * "correctAnswers": 1,
+     * "test": {
+     * "testName": "test1",
+     * "testDifficulty": "MEDIUM",
+     * "proposedBy": {
+     * "usern": "eduard"
+     * }
+     * }
+     * }
+     * ]
      * }
      */
     @GetMapping(value = "/test-results/all")
-    public ResponseEntity<?> getAllResults(){
+    public ResponseEntity<?> getAllResults() {
         final Map<String, List<TestResult>> results = new TreeMap<>();
         results.put(
                 "results",
-                resultService.getTestResultsByCondition(x-> true)
+                resultService.getTestResultsByCondition(x -> true)
         );
 
         return new ResponseEntity<>(results, HttpStatus.OK);

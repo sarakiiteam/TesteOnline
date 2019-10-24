@@ -54,7 +54,7 @@ public class Config {
     @Bean
     public ICacheResolver<IResultService> cacheResolverResult(){
         return  new CacheResolver<>((k, v)->{
-            System.out.println("ana are mere");
+            System.out.println("Cached expired....\nRefreshed cache");
         });
     }
 
