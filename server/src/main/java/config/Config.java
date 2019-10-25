@@ -19,6 +19,8 @@ import utils.controllers.restrictions.StringRestriction;
 import utils.service.IQuestionComparer;
 import utils.service.LowerCaseQuestionComparer;
 
+import java.util.Date;
+
 @Configuration
 public class Config {
 
@@ -54,6 +56,8 @@ public class Config {
     @Bean
     public ICacheResolver<IResultService> cacheResolverResult(){
         return  new CacheResolver<>((k, v)->{
+            System.out.println();
+            System.out.println("===================================");
             System.out.println("Cached expired....\nRefreshed cache");
         });
     }

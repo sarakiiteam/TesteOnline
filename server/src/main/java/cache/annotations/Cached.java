@@ -11,4 +11,6 @@ public @interface Cached {
     long cacheTime();
 
     String cacheName();
+
+    TTL timeUnit() default TTL.MILLISECONDS;
 }

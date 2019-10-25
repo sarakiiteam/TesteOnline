@@ -2,6 +2,8 @@ package service.impl;
 
 import cache.ICacheResolver;
 import cache.annotations.Cacheable;
+import cache.annotations.Cached;
+import cache.annotations.TTL;
 import cache.proxies.ProxyCacher;
 import database.models.Question;
 import database.models.Test;
@@ -88,6 +90,7 @@ public class ResultService extends ProxyCacher<IResultService> implements IResul
     }
 
     @Override
+    @Cached(cacheName = "getAllAvailableAnswers", cacheTime = 3600 * 24, timeUnit = TTL.SECONDS)
     public synchronized List<String> getAllAvailableAnswers() {
 
         final Set<String> answers = testRepository

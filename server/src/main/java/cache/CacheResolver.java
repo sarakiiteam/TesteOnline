@@ -1,6 +1,7 @@
 package cache;
 
 import cache.annotations.Cached;
+import cache.annotations.TTL;
 import javafx.util.Pair;
 
 import java.lang.reflect.InvocationTargetException;
@@ -120,7 +121,9 @@ public class CacheResolver<T> implements ICacheResolver<T> {
         }
 
         //compare if the time when the data was cached + cache live value is greater than current time
-        long cacheValue = cached.cacheTime();
+        long cacheValue = cached.timeUnit().equals(TTL.MILLISECONDS) ?
+                cached.cacheTime() : cached.cacheTime() * 1000;
+
         return cachedValue.getKey() + cacheValue > new Date().getTime();
     }
 
@@ -129,7 +132,7 @@ public class CacheResolver<T> implements ICacheResolver<T> {
         return instance.getClass().getName() + "." + method.getName();
     }
 
-    private String resetCacheKey(final String instanceClassName, final String cacheName){
+    private String resetCacheKey(final String instanceClassName, final String cacheName) {
         return String.format(
                 "%s.%s", instanceClassName, cacheName
         );
