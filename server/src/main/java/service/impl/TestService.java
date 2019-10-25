@@ -46,6 +46,8 @@ public class TestService extends ProxyCacher<ITestService> implements ITestServi
         testRepository.addTest(
                 username, testName, testDifficulty
         );
+
+        refreshCacheForThisInstance("getAllTests");
     }
 
     @Override
