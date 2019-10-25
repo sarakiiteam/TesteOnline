@@ -1,18 +1,17 @@
 package controllers;
 
+import cache.proxies.ProxyCacher;
 import database.models.TestResult;
 import javafx.util.Pair;
 import messages.Message;
 import messages.Requests.TestResultMessage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import service.interfaces.IResultService;
 import utils.controllers.IModelChecker;
-import utils.controllers.injection.CacheableChecker;
 
 import java.util.List;
 import java.util.Map;
@@ -31,11 +30,10 @@ public class ResultController {
     @Autowired
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public ResultController(
-            final IModelChecker modelChecker,
-            @Qualifier("resultServiceCached") final IResultService resultService) {
+            final IModelChecker modelChecker, final IResultService resultService) {
 
         this.modelChecker = modelChecker;
-        this.resultService = CacheableChecker.asCacheable(resultService);
+        this.resultService = ProxyCacher.getCacheable(resultService);
     }
 
     /**

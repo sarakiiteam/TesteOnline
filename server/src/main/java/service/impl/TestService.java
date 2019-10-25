@@ -1,6 +1,5 @@
 package service.impl;
 
-import cache.ICacheResolver;
 import database.models.Question;
 import database.models.Test;
 import database.models.enums.Difficulty;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import service.interfaces.IResultService;
 import service.interfaces.ITestService;
 import utils.exceptions.ErrorMessageException;
 
@@ -26,12 +24,10 @@ import java.util.function.Predicate;
 public class TestService implements ITestService {
 
     private final ITestRepository testRepository;
-    private final ICacheResolver<IResultService> cacheResolver;
 
     @Autowired
-    public TestService(final ITestRepository testRepository, final ICacheResolver<IResultService> cacheResolver) {
+    public TestService(final ITestRepository testRepository) {
         this.testRepository = testRepository;
-        this.cacheResolver = cacheResolver;
     }
 
     @Override
@@ -64,7 +60,6 @@ public class TestService implements ITestService {
         );
         asAbstractRepository(testRepository).update(test);
 
-        cacheResolver.resetCache();
     }
 
     @Override
