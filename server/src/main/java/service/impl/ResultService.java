@@ -91,6 +91,7 @@ public class ResultService extends ProxyCacher<IResultService> implements IResul
 
 
     @Override
+    //TODO add cache here and update it in addTestResult
     public synchronized List<TestResult> getTestResultsByCondition(
             final Predicate<TestResult> predicate) {
 
