@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import service.interfaces.IResultService;
+import service.interfaces.ITestService;
 import utils.controllers.IModelChecker;
 import utils.controllers.checkers.RestrictionModelChecker;
 import utils.controllers.restrictions.DifficultyEnumRestriction;
@@ -55,6 +56,15 @@ public class Config {
 
     @Bean
     public ICacheResolver<IResultService> cacheResolverResult(){
+        return  new CacheResolver<>((k, v)->{
+            System.out.println();
+            System.out.println("===================================");
+            System.out.println("Cached expired....\nRefreshed cache");
+        });
+    }
+
+    @Bean
+    public ICacheResolver<ITestService> cacheResolverTest(){
         return  new CacheResolver<>((k, v)->{
             System.out.println();
             System.out.println("===================================");

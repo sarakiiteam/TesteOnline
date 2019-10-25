@@ -1,5 +1,10 @@
 package service.impl;
 
+import cache.ICacheResolver;
+import cache.annotations.Cacheable;
+import cache.annotations.Cached;
+import cache.annotations.TTL;
+import cache.proxies.ProxyCacher;
 import database.models.Question;
 import database.models.Test;
 import database.models.enums.Difficulty;
@@ -18,15 +23,18 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 @Component
+@Cacheable
 @ComponentScan(
         basePackages = {"config"}
 )
-public class TestService implements ITestService {
+public class TestService extends ProxyCacher<ITestService> implements ITestService {
 
     private final ITestRepository testRepository;
 
     @Autowired
-    public TestService(final ITestRepository testRepository) {
+    public TestService(
+            final ITestRepository testRepository, final ICacheResolver<ITestService> cacheResolver) {
+        super(cacheResolver);
         this.testRepository = testRepository;
     }
 
@@ -72,6 +80,7 @@ public class TestService implements ITestService {
     }
 
     @Override
+    @Cached(cacheName = "getAllTests", cacheTime = 3600 * 24, timeUnit = TTL.SECONDS)
     public synchronized List<Test> getAllTests() {
         return testRepository.getAll();
     }
@@ -81,6 +90,11 @@ public class TestService implements ITestService {
         return this
                 .asAbstractRepository(testRepository)
                 .getByCondition(predicate);
+    }
+
+    @Override
+    protected ITestService getProxySource() {
+        return this;
     }
 
     @SuppressWarnings("unchecked")
