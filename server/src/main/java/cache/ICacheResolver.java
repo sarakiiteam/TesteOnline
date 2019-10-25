@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 
 public interface ICacheResolver<T> {
 
-    void resetCache();
+    void resetCache(final String cacheName, final Class<?> instanceClass);
 
     Object getValue(
             final Method method,

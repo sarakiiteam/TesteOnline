@@ -1,5 +1,10 @@
 package service.impl;
 
+import cache.ICacheResolver;
+import cache.annotations.Cacheable;
+import cache.annotations.Cached;
+import cache.annotations.TTL;
+import cache.proxies.ProxyCacher;
 import database.models.Question;
 import database.models.Test;
 import database.models.TestResult;
@@ -7,7 +12,6 @@ import database.models.enums.Difficulty;
 import database.store.interfaces.ITestRepository;
 import messages.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -20,18 +24,22 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Component
-@Qualifier("resultServiceNonCached")
+@Cacheable
 @ComponentScan(
         basePackages = {"config"}
 )
-public class ResultService implements IResultService {
+public class ResultService extends ProxyCacher<IResultService> implements IResultService {
 
     private final ITestRepository testRepository;
     private final IQuestionComparer questionComparer;
 
     @Autowired
     public ResultService(
-            final ITestRepository testRepository, final IQuestionComparer questionComparer) {
+            final ITestRepository testRepository,
+            final IQuestionComparer questionComparer,
+            final ICacheResolver<IResultService> resolver) {
+
+        super(resolver);
         this.testRepository = testRepository;
         this.questionComparer = questionComparer;
     }
@@ -81,29 +89,18 @@ public class ResultService implements IResultService {
         );
     }
 
-    @Override
-    public synchronized List<String> getAllAvailableAnswers() {
-
-        final Set<String> answers = testRepository
-                .getAll()
-                .stream()
-                .map(Test::getQuestions)
-                .flatMap(Set::stream)
-                .map(Question::getAnswer)
-                .collect(Collectors.toSet());
-
-        if (answers.isEmpty()) {
-            return new ArrayList<>();
-        }
-
-        return new ArrayList<>(answers);
-    }
 
     @Override
+    //TODO add cache here and update it in addTestResult
     public synchronized List<TestResult> getTestResultsByCondition(
             final Predicate<TestResult> predicate) {
 
         return testRepository.getTestResultsByCondition(predicate);
+    }
+
+    @Override
+    protected IResultService getProxySource() {
+        return this;
     }
 
 

@@ -9,4 +9,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Cached {
     long cacheTime();
+
+    String cacheName();
+
+    TTL timeUnit() default TTL.MILLISECONDS;
 }

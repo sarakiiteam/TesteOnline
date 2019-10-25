@@ -1,5 +1,6 @@
 package controllers;
 
+import cache.proxies.ProxyCacher;
 import database.models.Question;
 import database.models.Test;
 import javafx.util.Pair;
@@ -34,7 +35,8 @@ public class TestController {
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public TestController(
             final ITestService testService, final IModelChecker modelChecker) {
-        this.testService = testService;
+
+        this.testService = ProxyCacher.getCacheable(testService);
         this.modelChecker = modelChecker;
     }
 

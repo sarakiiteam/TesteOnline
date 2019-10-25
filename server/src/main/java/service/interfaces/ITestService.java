@@ -49,6 +49,11 @@ public interface ITestService {
      * @return a list with all tests that respects a certain condition
      */
     List<Test> getFilteredTests(final Predicate<Test> predicate);
+
+    /**
+     * @return a list with all available answers
+     */
+    List<String> getAllAvailableAnswers();
 }
 
 

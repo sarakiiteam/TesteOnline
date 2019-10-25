@@ -1,6 +1,10 @@
 package service.impl;
 
 import cache.ICacheResolver;
+import cache.annotations.Cacheable;
+import cache.annotations.Cached;
+import cache.annotations.TTL;
+import cache.proxies.ProxyCacher;
 import database.models.Question;
 import database.models.Test;
 import database.models.enums.Difficulty;
@@ -17,21 +21,24 @@ import utils.exceptions.ErrorMessageException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Component
+@Cacheable
 @ComponentScan(
         basePackages = {"config"}
 )
-public class TestService implements ITestService {
+public class TestService extends ProxyCacher<ITestService> implements ITestService {
 
     private final ITestRepository testRepository;
-    private final ICacheResolver<IResultService> cacheResolver;
 
     @Autowired
-    public TestService(final ITestRepository testRepository, final ICacheResolver<IResultService> cacheResolver) {
+    public TestService(
+            final ITestRepository testRepository, final ICacheResolver<ITestService> cacheResolver) {
+        super(cacheResolver);
         this.testRepository = testRepository;
-        this.cacheResolver = cacheResolver;
     }
 
     @Override
@@ -42,6 +49,8 @@ public class TestService implements ITestService {
         testRepository.addTest(
                 username, testName, testDifficulty
         );
+
+        refreshCacheForThisInstance("getAllTests");
     }
 
     @Override
@@ -64,7 +73,7 @@ public class TestService implements ITestService {
         );
         asAbstractRepository(testRepository).update(test);
 
-        cacheResolver.resetCache();
+        refreshCacheForThisInstance("getAllAvailableAnswers");
     }
 
     @Override
@@ -77,8 +86,28 @@ public class TestService implements ITestService {
     }
 
     @Override
+    @Cached(cacheName = "getAllTests", cacheTime = 3600 * 24, timeUnit = TTL.SECONDS)
     public synchronized List<Test> getAllTests() {
         return testRepository.getAll();
+    }
+
+    @Override
+    @Cached(cacheName = "getAllAvailableAnswers", cacheTime = 3600 * 24, timeUnit = TTL.SECONDS)
+    public synchronized List<String> getAllAvailableAnswers() {
+
+        final Set<String> answers = testRepository
+                .getAll()
+                .stream()
+                .map(Test::getQuestions)
+                .flatMap(Set::stream)
+                .map(Question::getAnswer)
+                .collect(Collectors.toSet());
+
+        if (answers.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        return new ArrayList<>(answers);
     }
 
     @Override
@@ -86,6 +115,11 @@ public class TestService implements ITestService {
         return this
                 .asAbstractRepository(testRepository)
                 .getByCondition(predicate);
+    }
+
+    @Override
+    protected ITestService getProxySource() {
+        return this;
     }
 
     @SuppressWarnings("unchecked")
