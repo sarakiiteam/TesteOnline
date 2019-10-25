@@ -89,24 +89,6 @@ public class ResultService extends ProxyCacher<IResultService> implements IResul
         );
     }
 
-    @Override
-    @Cached(cacheName = "getAllAvailableAnswers", cacheTime = 3600 * 24, timeUnit = TTL.SECONDS)
-    public synchronized List<String> getAllAvailableAnswers() {
-
-        final Set<String> answers = testRepository
-                .getAll()
-                .stream()
-                .map(Test::getQuestions)
-                .flatMap(Set::stream)
-                .map(Question::getAnswer)
-                .collect(Collectors.toSet());
-
-        if (answers.isEmpty()) {
-            return new ArrayList<>();
-        }
-
-        return new ArrayList<>(answers);
-    }
 
     @Override
     public synchronized List<TestResult> getTestResultsByCondition(
@@ -119,6 +101,7 @@ public class ResultService extends ProxyCacher<IResultService> implements IResul
     protected IResultService getProxySource() {
         return this;
     }
+
 
     private Map<Integer, Question> mapQuestionsById(final String testName) {
 

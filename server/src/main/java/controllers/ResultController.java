@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import service.interfaces.IResultService;
+import service.interfaces.ITestService;
 import utils.controllers.IModelChecker;
 
 import java.util.List;
@@ -25,15 +26,17 @@ import java.util.TreeMap;
 public class ResultController {
 
     private final IResultService resultService;
+    private final ITestService testService;
     private final IModelChecker modelChecker;
 
     @Autowired
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public ResultController(
-            final IModelChecker modelChecker, final IResultService resultService) {
+            final IModelChecker modelChecker, final IResultService resultService, final ITestService testService) {
 
         this.modelChecker = modelChecker;
         this.resultService = ProxyCacher.getCacheable(resultService);
+        this.testService = ProxyCacher.getCacheable(testService);
     }
 
     /**
@@ -54,7 +57,7 @@ public class ResultController {
     public ResponseEntity<?> getAllAvailableAnswers() {
 
         final Map<String, List<String>> answers = new TreeMap<>();
-        answers.put("answers", resultService.getAllAvailableAnswers());
+        answers.put("answers", testService.getAllAvailableAnswers());
 
         return new ResponseEntity<>(answers, HttpStatus.OK);
     }

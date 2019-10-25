@@ -22,11 +22,6 @@ public interface IResultService {
             final String guestName, final List<Answer> answers) throws ErrorMessageException;
 
     /**
-     * @return a list with all available answers
-     */
-    List<String> getAllAvailableAnswers();
-
-    /**
      *
      * @param predicate: a filter function
      * @return a list with all test results that respects a given condition

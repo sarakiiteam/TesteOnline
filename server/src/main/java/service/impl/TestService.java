@@ -14,13 +14,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import service.interfaces.IResultService;
 import service.interfaces.ITestService;
 import utils.exceptions.ErrorMessageException;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Component
 @Cacheable
@@ -70,6 +73,7 @@ public class TestService extends ProxyCacher<ITestService> implements ITestServi
         );
         asAbstractRepository(testRepository).update(test);
 
+        refreshCacheForThisInstance("getAllAvailableAnswers");
     }
 
     @Override
@@ -85,6 +89,25 @@ public class TestService extends ProxyCacher<ITestService> implements ITestServi
     @Cached(cacheName = "getAllTests", cacheTime = 3600 * 24, timeUnit = TTL.SECONDS)
     public synchronized List<Test> getAllTests() {
         return testRepository.getAll();
+    }
+
+    @Override
+    @Cached(cacheName = "getAllAvailableAnswers", cacheTime = 3600 * 24, timeUnit = TTL.SECONDS)
+    public synchronized List<String> getAllAvailableAnswers() {
+
+        final Set<String> answers = testRepository
+                .getAll()
+                .stream()
+                .map(Test::getQuestions)
+                .flatMap(Set::stream)
+                .map(Question::getAnswer)
+                .collect(Collectors.toSet());
+
+        if (answers.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        return new ArrayList<>(answers);
     }
 
     @Override

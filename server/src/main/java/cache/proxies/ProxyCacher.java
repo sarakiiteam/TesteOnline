@@ -102,6 +102,7 @@ public abstract class ProxyCacher<T> implements ICacheableProxy<T> {
 
 
     @Override
+    @Deprecated
     public void refreshGlobalCache(
             final String cacheName, final Class<?> cachedMethodLocationClass) {
 
