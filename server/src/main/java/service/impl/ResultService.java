@@ -1,9 +1,7 @@
 package service.impl;
 
 import cache.ICacheResolver;
-import cache.annotations.Cacheable;
-import cache.annotations.Cached;
-import cache.annotations.TTL;
+import cache.annotations.*;
 import cache.proxies.ProxyCacher;
 import database.models.Question;
 import database.models.Test;
@@ -45,6 +43,11 @@ public class ResultService extends ProxyCacher<IResultService> implements IResul
     }
 
     @Override
+    @VolatileCaches(
+            value = {
+                    @VolatileCache(cacheUpdate = "getTestResultsByCondition")
+            }
+    )
     public synchronized void addTestResult
             (final String testName,
              final String guestName, final List<Answer> answers) throws ErrorMessageException {
@@ -60,11 +63,6 @@ public class ResultService extends ProxyCacher<IResultService> implements IResul
         final Map<Integer, Question> questionMap = mapQuestionsById(testName);
         // get the test
         final Test test = testOptional.get();
-
-        if (test.getQuestions().size() != answers.size()) {
-            throw new ErrorMessageException(
-                    "You did not answered to all questions", HttpStatus.BAD_REQUEST);
-        }
 
         //calculate the number of points
         int totalScore = 0, correctAnswers = 0;
@@ -91,7 +89,11 @@ public class ResultService extends ProxyCacher<IResultService> implements IResul
 
 
     @Override
-    //TODO add cache here and update it in addTestResult
+    @Cached(
+            cacheName = "getTestResultsByCondition",
+            cacheTime = 3600 * 24,
+            timeUnit = TTL.SECONDS
+    )
     public synchronized List<TestResult> getTestResultsByCondition(
             final Predicate<TestResult> predicate) {
 

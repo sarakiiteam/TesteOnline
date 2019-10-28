@@ -13,7 +13,7 @@ public class Message implements Serializable {
     @JsonProperty("msg")
     private String message;
 
-    public Message(HttpStatus code, String message) {
+    public Message(final HttpStatus code, final String message) {
         this.code = code;
         this.message = message;
     }
@@ -27,5 +27,13 @@ public class Message implements Serializable {
 
     public String getMessage() {
         return message;
+    }
+
+    public void setCode(final HttpStatus code) {
+        this.code = code;
+    }
+
+    public void setMessage(final String message) {
+        this.message = message;
     }
 }
