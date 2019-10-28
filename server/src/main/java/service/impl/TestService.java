@@ -1,9 +1,7 @@
 package service.impl;
 
 import cache.ICacheResolver;
-import cache.annotations.Cacheable;
-import cache.annotations.Cached;
-import cache.annotations.TTL;
+import cache.annotations.*;
 import cache.proxies.ProxyCacher;
 import database.models.Question;
 import database.models.Test;
@@ -14,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import service.interfaces.IResultService;
 import service.interfaces.ITestService;
 import utils.exceptions.ErrorMessageException;
 
@@ -42,24 +39,36 @@ public class TestService extends ProxyCacher<ITestService> implements ITestServi
     }
 
     @Override
+    @VolatileCaches(
+            value = {
+                    @VolatileCache(cacheUpdate = "getAllTests"),
+                    @VolatileCache(cacheUpdate = "getFilteredTests")
+            }
+    )
     public synchronized void addTest(
             final String username,
+            final String description,
             final String testName, final Difficulty testDifficulty) throws ErrorMessageException {
 
         testRepository.addTest(
-                username, testName, testDifficulty
+                username, description, testName, testDifficulty
         );
-
-        refreshCacheForThisInstance("getAllTests");
     }
 
     @Override
+    @VolatileCaches(
+            value = {
+                    @VolatileCache(cacheUpdate = "getAllAvailableAnswers"),
+                    @VolatileCache(cacheUpdate = "getQuestionsForTest"),
+                    @VolatileCache(cacheUpdate = "getFilteredTests")
+            }
+    )
     public synchronized void addQuestion(
             final String testName,
-            final String question, final String answer, final int points) throws ErrorMessageException{
+            final String question, final String answer, final int points) throws ErrorMessageException {
 
         final Optional<Test> testOptional = testRepository.getTestByName(testName);
-        if(!testOptional.isPresent()){
+        if (!testOptional.isPresent()) {
             throw new ErrorMessageException(
                     "Test not found", HttpStatus.NOT_FOUND
             );
@@ -72,11 +81,15 @@ public class TestService extends ProxyCacher<ITestService> implements ITestServi
                 )
         );
         asAbstractRepository(testRepository).update(test);
-
-        refreshCacheForThisInstance("getAllAvailableAnswers");
     }
 
+
     @Override
+    @Cached(
+            cacheName = "getQuestionsForTest",
+            cacheTime = 3600 * 24,
+            timeUnit = TTL.SECONDS
+    )
     public List<Question> getQuestionsForTest(final String testName) {
         final Optional<Test> testOptional = testRepository.getTestByName(testName);
         return testOptional
@@ -86,13 +99,21 @@ public class TestService extends ProxyCacher<ITestService> implements ITestServi
     }
 
     @Override
-    @Cached(cacheName = "getAllTests", cacheTime = 3600 * 24, timeUnit = TTL.SECONDS)
+    @Cached(
+            cacheName = "getAllTests",
+            cacheTime = 3600 * 24,
+            timeUnit = TTL.SECONDS
+    )
     public synchronized List<Test> getAllTests() {
         return testRepository.getAll();
     }
 
     @Override
-    @Cached(cacheName = "getAllAvailableAnswers", cacheTime = 3600 * 24, timeUnit = TTL.SECONDS)
+    @Cached(
+            cacheName = "getAllAvailableAnswers",
+            cacheTime = 3600 * 24,
+            timeUnit = TTL.SECONDS
+    )
     public synchronized List<String> getAllAvailableAnswers() {
 
         final Set<String> answers = testRepository
@@ -111,6 +132,11 @@ public class TestService extends ProxyCacher<ITestService> implements ITestServi
     }
 
     @Override
+    @Cached(
+            cacheName = "getFilteredTests",
+            cacheTime = 3600 * 24,
+            timeUnit = TTL.SECONDS
+    )
     public synchronized List<Test> getFilteredTests(final Predicate<Test> predicate) {
         return this
                 .asAbstractRepository(testRepository)

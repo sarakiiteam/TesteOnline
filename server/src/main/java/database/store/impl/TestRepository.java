@@ -64,6 +64,7 @@ public class TestRepository extends AbstractRepository<Test> implements ITestRep
     @Override
     public void addTest(
             final String username,
+            final String description,
             final String testName, final Difficulty testDifficulty) throws ErrorMessageException {
 
         final Optional<User> userOptional = userRepository.getByUsername(username);
@@ -75,7 +76,7 @@ public class TestRepository extends AbstractRepository<Test> implements ITestRep
 
         final User user = userOptional.get();
         user.addTest(new Test(
-                testName, testDifficulty
+                testName, testDifficulty, description
         ));
 
         userRepository.update(user);

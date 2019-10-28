@@ -2,6 +2,7 @@ package cache;
 
 import cache.annotations.Cached;
 import cache.annotations.TTL;
+import cache.annotations.VolatileCaches;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -57,6 +58,26 @@ public class CacheResolver<T> implements ICacheResolver<T> {
                 )
         );
 
+        //get the method from implementation instead of interface
+        //enables that volatile cache annotation to be on method from interface implementation
+        final VolatileCaches volatileCaches = getVolatileCacheAnnotation(
+                instance.getClass().getDeclaredMethod(
+                        method.getName(), method.getParameterTypes()
+                )
+        );
+
+        // if method is annotated with @VolatileCache annotation then update all cache that
+        if (volatileCaches != null) {
+            final Object object = method.invoke(instance, args);
+            updateCache(
+                    instance.getClass().getDeclaredMethod(
+                            method.getName(), method.getParameterTypes()
+                    ),
+                    instance.getClass()
+            );
+            return object;
+        }
+
         //check if the method is not cacheable
         if (cached == null) {
             return method.invoke(instance, args);
@@ -77,6 +98,18 @@ public class CacheResolver<T> implements ICacheResolver<T> {
         return localCache
                 .get(cacheKey(instance, method))
                 .getValue();
+    }
+
+    private void updateCache(
+            final Method method, final Class<?> instanceClass) {
+
+        final VolatileCaches volatileCaches = method.getDeclaredAnnotation(VolatileCaches.class);
+
+        Arrays
+                .asList(volatileCaches.value())
+                .forEach(volatileCache -> {
+                    resetCache(volatileCache.cacheUpdate(), instanceClass);
+                });
     }
 
 
@@ -104,6 +137,10 @@ public class CacheResolver<T> implements ICacheResolver<T> {
 
     private Cached getCacheAnnotation(final Method method) {
         return method.getDeclaredAnnotation(Cached.class);
+    }
+
+    private VolatileCaches getVolatileCacheAnnotation(final Method method) {
+        return method.getDeclaredAnnotation(VolatileCaches.class);
     }
 
     private boolean isCacheValid(final Method method, final Cached cached, final T instance) {

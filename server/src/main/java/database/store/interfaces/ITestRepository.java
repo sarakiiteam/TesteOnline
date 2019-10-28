@@ -28,6 +28,7 @@ public interface ITestRepository extends IPersistence<Test> {
      */
     void addTest(
             final String username,
+            final String description,
             final String testName, final Difficulty testDifficulty) throws ErrorMessageException;
 
     /**

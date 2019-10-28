@@ -24,7 +24,7 @@ public class UserService implements IUserService {
 
 
     @Override
-    public void registerAccount(
+    public synchronized void registerAccount(
             final String username, final String password) throws ErrorMessageException {
 
         //encode the password
@@ -39,7 +39,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void changePassword(
+    public synchronized void changePassword(
             final String username, final String password) throws ErrorMessageException {
 
         //encode the password
