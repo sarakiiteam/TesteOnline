@@ -47,10 +47,11 @@ public class TestService extends ProxyCacher<ITestService> implements ITestServi
     )
     public synchronized void addTest(
             final String username,
+            final String description,
             final String testName, final Difficulty testDifficulty) throws ErrorMessageException {
 
         testRepository.addTest(
-                username, testName, testDifficulty
+                username, description, testName, testDifficulty
         );
     }
 

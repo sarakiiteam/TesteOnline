@@ -74,6 +74,7 @@ public class TestController {
 
             testService.addTest(
                     message.getUsername(),
+                    message.getDescription(),
                     message.getTestName(), message.getDifficulty()
             );
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import database.models.enums.Difficulty;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -29,6 +30,10 @@ public class Test {
     @Column(name = "name")
     private String testName;
 
+    @Column(name = "description")
+    @ColumnDefault("'No description available'")
+    private String description;
+
     @Column(name = "difficulty")
     private Difficulty testDifficulty;
 
@@ -51,8 +56,9 @@ public class Test {
     public Test() {
     }
 
-    public Test(String testName, Difficulty testDifficulty) {
+    public Test(String testName, Difficulty testDifficulty, String description) {
         this.testName = testName;
+        this.description = description;
         this.testDifficulty = testDifficulty;
     }
 
@@ -102,4 +108,11 @@ public class Test {
         this.user = user;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

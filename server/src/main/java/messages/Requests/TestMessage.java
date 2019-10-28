@@ -8,18 +8,28 @@ public class TestMessage implements Serializable {
 
     private String username;
     private String testName;
+    private String description = "No description available";
 
     private Difficulty difficulty;
 
     public TestMessage(
-            final String username,
+            final String username, final String description,
             final String testName, final Difficulty difficulty) {
         this.username = username;
         this.testName = testName;
+        this.description = description;
         this.difficulty = difficulty;
     }
 
     public TestMessage() {
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getUsername() {

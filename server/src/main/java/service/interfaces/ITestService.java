@@ -13,12 +13,13 @@ public interface ITestService {
     /**
      * Adds a new test into database
      * @param username: the user's username
+     * @param description: the test's description
      * @param testName: the test's name
      * @param testDifficulty: test's difficulty
      * @throws ErrorMessageException if something is wrong
      */
     void addTest(
-            final String username,
+            final String username, final String description,
             final String testName, final Difficulty testDifficulty) throws ErrorMessageException;
 
     /**
