@@ -82,7 +82,11 @@ public class TestService extends ProxyCacher<ITestService> implements ITestServi
 
 
     @Override
-    @Cached(cacheName = "getQuestionsForTest", cacheTime = 3600 * 24, timeUnit = TTL.SECONDS)
+    @Cached(
+            cacheName = "getQuestionsForTest",
+            cacheTime = 3600 * 24,
+            timeUnit = TTL.SECONDS
+    )
     public List<Question> getQuestionsForTest(final String testName) {
         final Optional<Test> testOptional = testRepository.getTestByName(testName);
         return testOptional
@@ -92,13 +96,21 @@ public class TestService extends ProxyCacher<ITestService> implements ITestServi
     }
 
     @Override
-    @Cached(cacheName = "getAllTests", cacheTime = 3600 * 24, timeUnit = TTL.SECONDS)
+    @Cached(
+            cacheName = "getAllTests",
+            cacheTime = 3600 * 24,
+            timeUnit = TTL.SECONDS
+    )
     public synchronized List<Test> getAllTests() {
         return testRepository.getAll();
     }
 
     @Override
-    @Cached(cacheName = "getAllAvailableAnswers", cacheTime = 3600 * 24, timeUnit = TTL.SECONDS)
+    @Cached(
+            cacheName = "getAllAvailableAnswers",
+            cacheTime = 3600 * 24,
+            timeUnit = TTL.SECONDS
+    )
     public synchronized List<String> getAllAvailableAnswers() {
 
         final Set<String> answers = testRepository
