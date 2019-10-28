@@ -1,9 +1,7 @@
 package service.impl;
 
 import cache.ICacheResolver;
-import cache.annotations.Cacheable;
-import cache.annotations.Cached;
-import cache.annotations.TTL;
+import cache.annotations.*;
 import cache.proxies.ProxyCacher;
 import database.models.Question;
 import database.models.Test;
@@ -14,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import service.interfaces.IResultService;
 import service.interfaces.ITestService;
 import utils.exceptions.ErrorMessageException;
 
@@ -42,6 +39,11 @@ public class TestService extends ProxyCacher<ITestService> implements ITestServi
     }
 
     @Override
+    @VolatileCaches(
+            value = {
+                    @VolatileCache(cacheUpdate = "getAllTests")
+            }
+    )
     public synchronized void addTest(
             final String username,
             final String testName, final Difficulty testDifficulty) throws ErrorMessageException {
@@ -49,17 +51,20 @@ public class TestService extends ProxyCacher<ITestService> implements ITestServi
         testRepository.addTest(
                 username, testName, testDifficulty
         );
-
-        refreshCacheForThisInstance("getAllTests");
     }
 
     @Override
+    @VolatileCaches(
+            value = {
+                    @VolatileCache(cacheUpdate = "getAllAvailableAnswers")
+            }
+    )
     public synchronized void addQuestion(
             final String testName,
-            final String question, final String answer, final int points) throws ErrorMessageException{
+            final String question, final String answer, final int points) throws ErrorMessageException {
 
         final Optional<Test> testOptional = testRepository.getTestByName(testName);
-        if(!testOptional.isPresent()){
+        if (!testOptional.isPresent()) {
             throw new ErrorMessageException(
                     "Test not found", HttpStatus.NOT_FOUND
             );
@@ -72,8 +77,6 @@ public class TestService extends ProxyCacher<ITestService> implements ITestServi
                 )
         );
         asAbstractRepository(testRepository).update(test);
-
-        refreshCacheForThisInstance("getAllAvailableAnswers");
     }
 
     @Override
