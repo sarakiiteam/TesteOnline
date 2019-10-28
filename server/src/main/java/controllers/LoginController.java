@@ -1,6 +1,5 @@
 package controllers;
 
-import javafx.util.Pair;
 import messages.Message;
 import messages.Requests.AuthenticationMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import service.interfaces.ILoginService;
 import utils.controllers.IModelChecker;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user")
@@ -49,7 +50,7 @@ public class LoginController {
     @PostMapping(value = "/login")
     public ResponseEntity<?> authenticateStudent(@RequestBody final AuthenticationMessage message) {
 
-        final Pair<Boolean, String> validationResult = modelChecker.isModelValid(message);
+        final Map.Entry<Boolean, String> validationResult = modelChecker.isModelValid(message);
 
         if (!validationResult.getKey()) {
             return new ResponseEntity<>(

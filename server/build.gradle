@@ -52,4 +52,8 @@ dependencies {
     // https://mvnrepository.com/artifact/org.springframework.security/spring-security-core
     compile group: 'org.springframework.security', name: 'spring-security-core', version: '5.0.9.RELEASE'
 
+    // https://mvnrepository.com/artifact/org.wildfly.swarm/javafx
+    compile group: 'org.wildfly.swarm', name: 'javafx', version: '2016.10.0'
+
+
 }

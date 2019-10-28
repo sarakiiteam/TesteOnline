@@ -2,20 +2,17 @@ package cache;
 
 import cache.annotations.Cached;
 import cache.annotations.TTL;
-import javafx.util.Pair;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 
 public class CacheResolver<T> implements ICacheResolver<T> {
 
     private BiConsumer<Object, Object> consumer;
-    private volatile ConcurrentHashMap<String, Pair<Long, Object>> localCache = new ConcurrentHashMap<>();
+    private volatile ConcurrentHashMap<String, Map.Entry<Long, Object>> localCache = new ConcurrentHashMap<>();
     private volatile ConcurrentHashMap<String, Tuple<Method, T, List<Object>>> cacheResetHandler = new ConcurrentHashMap<>();
 
     public CacheResolver(final BiConsumer<Object, Object> consumer) {
@@ -95,7 +92,7 @@ public class CacheResolver<T> implements ICacheResolver<T> {
         final Object newValue = method.invoke(instance, args);
         localCache.put(
                 cacheKey(instance, method),
-                new Pair<>(
+                new AbstractMap.SimpleEntry<>(
                         new Date().getTime(),
                         newValue
                 )
@@ -111,7 +108,7 @@ public class CacheResolver<T> implements ICacheResolver<T> {
 
     private boolean isCacheValid(final Method method, final Cached cached, final T instance) {
 
-        final Pair<Long, Object> cachedValue = localCache.get(
+        final Map.Entry<Long, Object> cachedValue = localCache.get(
                 cacheKey(instance, method)
         );
 

@@ -1,20 +1,21 @@
 package utils.controllers.checkers;
 
-import javafx.util.Pair;
 import utils.controllers.IModelChecker;
 import utils.controllers.IRestriction;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class RestrictionModelChecker implements IModelChecker {
 
     private final List<IRestriction<Object>> restrictions = new ArrayList<>();
 
     @Override
-    public Pair<Boolean, String> isModelValid(final Object model) {
+    public Map.Entry<Boolean, String> isModelValid(final Object model) {
 
         final StringBuilder errors = new StringBuilder();
 
@@ -30,7 +31,7 @@ public class RestrictionModelChecker implements IModelChecker {
             }
         }
 
-        return new Pair<>(errors.length() == 0,  errors.toString());
+        return new AbstractMap.SimpleEntry<>(errors.length() == 0, errors.toString());
     }
 
     public void addRestriction(final IRestriction<Object> restriction) {

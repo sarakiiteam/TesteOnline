@@ -1,6 +1,5 @@
 package controllers;
 
-import javafx.util.Pair;
 import messages.Message;
 import messages.Requests.AuthenticationMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import service.interfaces.IUserService;
 import utils.controllers.IModelChecker;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user")
@@ -49,7 +50,7 @@ public class UserController {
     public ResponseEntity<?> registerUser(@RequestBody AuthenticationMessage message) {
 
         //check the model validity
-        final Pair<Boolean, String> validationResult = modelChecker.isModelValid(message);
+        final Map.Entry<Boolean, String> validationResult = modelChecker.isModelValid(message);
         if (!validationResult.getKey()) {
             return new ResponseEntity<>(
                     new Message(
@@ -104,7 +105,7 @@ public class UserController {
     public ResponseEntity<?> updateProfile(@RequestBody AuthenticationMessage message) {
 
         //check the model validity
-        final Pair<Boolean, String> validationResult = modelChecker.isModelValid(message);
+        final Map.Entry<Boolean, String> validationResult = modelChecker.isModelValid(message);
         if (!validationResult.getKey()) {
             return new ResponseEntity<>(
                     new Message(
