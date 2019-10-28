@@ -1,9 +1,7 @@
 package utils.controllers;
 
-import javafx.util.Pair;
-
-import java.util.List;
+import java.util.Map;
 
 public interface IModelChecker {
-    Pair<Boolean, String> isModelValid(final Object model);
+    Map.Entry<Boolean, String> isModelValid(final Object model);
 }

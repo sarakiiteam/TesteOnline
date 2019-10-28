@@ -3,7 +3,6 @@ package controllers;
 import cache.proxies.ProxyCacher;
 import database.models.Question;
 import database.models.Test;
-import javafx.util.Pair;
 import messages.Message;
 import messages.Requests.QuestionMessage;
 import messages.Requests.TestMessage;
@@ -60,7 +59,7 @@ public class TestController {
     public ResponseEntity<?> registerUser(@RequestBody TestMessage message) {
 
         //check the model validity
-        final Pair<Boolean, String> validationResult = modelChecker.isModelValid(message);
+        final Map.Entry<Boolean, String> validationResult = modelChecker.isModelValid(message);
         if (!validationResult.getKey()) {
             return new ResponseEntity<>(
                     new Message(
@@ -220,7 +219,7 @@ public class TestController {
                                                @RequestBody final QuestionMessage message) {
 
         // validate
-        final Pair<Boolean, String> validationResult = modelChecker.isModelValid(message);
+        final Map.Entry<Boolean, String> validationResult = modelChecker.isModelValid(message);
         if (!validationResult.getKey()) {
             return new ResponseEntity<>(
                     new Message(

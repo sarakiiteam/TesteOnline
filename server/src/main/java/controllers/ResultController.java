@@ -2,7 +2,6 @@ package controllers;
 
 import cache.proxies.ProxyCacher;
 import database.models.TestResult;
-import javafx.util.Pair;
 import messages.Message;
 import messages.Requests.TestResultMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,7 +91,7 @@ public class ResultController {
     @PostMapping(value = "/test-results/add")
     public ResponseEntity<?> addTestResult(@RequestBody TestResultMessage message) {
 
-        final Pair<Boolean, String> validationResult = modelChecker.isModelValid(message);
+        final Map.Entry<Boolean, String> validationResult = modelChecker.isModelValid(message);
         if (!validationResult.getKey()) {
             return new ResponseEntity<>(
                     new Message(
