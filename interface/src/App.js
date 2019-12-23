@@ -1,26 +1,38 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
 
-function App() {
+import { Route, Switch, withRouter, Redirect } from "react-router-dom";
+
+import "./App.css";
+import LandingPage from "./components/LandingPageComponent/LandingPageComponent";
+import QuizzesPage from "./components/QuizzesPage/QuizzesPageComponent";
+import MenuComponent from "./components/MenuComponent/MenuComponent";
+
+import { Provider as AppProvider } from "./Contexts/AppContext/index";
+import { Provider as QuizProvider } from "./Contexts/QuizPageContext/index";
+import QuizPage from "./components/QuizPageComponent/QuizPageComponent";
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+    <AppProvider>
+      {window.location.pathname !== "/home" && <MenuComponent />}
 
-export default App;
+      <Switch>
+        <Route exact path="/">
+          <Redirect to="/home" />
+        </Route>
+
+        <Route path="/home" component={LandingPage} />
+
+        <Route path="/create-quiz" />
+
+        <QuizProvider>
+          <Route path="/solve-quiz" component={QuizzesPage} />
+
+          <Route path="/quiz" component={QuizPage} />
+        </QuizProvider>
+      </Switch>
+    </AppProvider>
+  );
+};
+
+export default withRouter(App);

@@ -1,0 +1,40 @@
+.logo {
+	margin-top: 1%;
+}
+
+.ui.button.buttonStyle {
+	background-color: transparent;
+	border: 1px solid #55e9bc;
+	color: #55e9bc;
+	margin: 2%;
+}
+
+.ui.button.buttonStyle:hover {
+	background-color: #55e9bc;
+	border: 1px solid #55e9bc;
+	color: #0e1c1a;
+}
+
+.ui.grid.gridStyle {
+	margin: 0;
+	height: 100vh;
+}
+
+.ui.grid > .row.buttonsRow {
+	margin-top: 5%;
+}
+
+.ui.segment.textDisplay {
+	width: 20%;
+	margin-top: 3%;
+	background-color: transparent;
+	border: 1px solid #55e9bc;
+	color: #55e9bc;
+	justify-content: center;
+	align-items: center;
+	vertical-align: middle;
+	align-content: center;
+	text-align: center;
+	height: 100px;
+	display: flex;
+}

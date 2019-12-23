@@ -1,0 +1,8 @@
+.ui.container.wrapperStyle {
+  align-content: center;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  overflow-y: hidden;
+  width: 70%;
+}

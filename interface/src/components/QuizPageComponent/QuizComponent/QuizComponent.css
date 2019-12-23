@@ -1,0 +1,16 @@
+.ui.form .grouped.question {
+  text-align: left;
+}
+
+.ui.form.quizForm {
+  overflow-y: scroll;
+  height: 400px;
+}
+
+.correctAnswer {
+  background-color: #ccff90;
+}
+
+.wrongAnswer {
+  background-color: #ff8a80;
+}

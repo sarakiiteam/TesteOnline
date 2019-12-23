@@ -1,0 +1,30 @@
+.ui.cards.quizPage {
+  width: auto;
+  margin: 8% 20%;
+}
+
+.ui.container.userPage {
+  width: 300px;
+  margin-top: 10%;
+}
+
+.ui.card.quizDiv {
+  width: 80%;
+  height: 500px;
+  box-shadow: 2px 2px black;
+}
+
+.ui.card.timerDiv {
+  margin-top: 30%;
+  text-align: center;
+  vertical-align: middle;
+  align-content: center;
+  width: 15%;
+  height: 100px;
+  padding: 0;
+  box-shadow: 2px 2px black;
+}
+
+.timer {
+  margin-top: 10px;
+}
