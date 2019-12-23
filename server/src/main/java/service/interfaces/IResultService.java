@@ -2,6 +2,7 @@ package service.interfaces;
 
 import database.models.Question;
 import database.models.TestResult;
+import domain.TestOverview;
 import messages.Answer;
 import utils.exceptions.ErrorMessageException;
 
@@ -17,7 +18,7 @@ public interface IResultService {
      * @param answers: the list of answers
      * @throws ErrorMessageException if something is wrong
      */
-    void addTestResult(
+    TestOverview addTestAndGetResult(
             final String testName,
             final String guestName, final List<Answer> answers) throws ErrorMessageException;
 

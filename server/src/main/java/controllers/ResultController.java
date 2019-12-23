@@ -2,6 +2,7 @@ package controllers;
 
 import cache.proxies.ProxyCacher;
 import database.models.TestResult;
+import domain.TestOverview;
 import messages.Message;
 import messages.Requests.TestResultMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,8 +103,9 @@ public class ResultController {
             );
         }
 
+        final TestOverview overview;
         try {
-            resultService.addTestResult(
+            overview = resultService.addTestAndGetResult(
                     message.getTestName(),
                     message.getGuestName(), message.getAnswers()
             );
@@ -117,10 +119,7 @@ public class ResultController {
         }
 
         return new ResponseEntity<>(
-                new Message(
-                        HttpStatus.CREATED, "Result successfully added"
-                ),
-                HttpStatus.CREATED
+                overview, HttpStatus.CREATED
         );
     }
 

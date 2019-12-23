@@ -8,6 +8,7 @@ import database.models.Test;
 import database.models.TestResult;
 import database.models.enums.Difficulty;
 import database.store.interfaces.ITestRepository;
+import domain.TestOverview;
 import messages.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -48,7 +49,7 @@ public class ResultService extends ProxyCacher<IResultService> implements IResul
                     @VolatileCache(cacheUpdate = "getTestResultsByCondition")
             }
     )
-    public synchronized void addTestResult
+    public synchronized TestOverview addTestAndGetResult
             (final String testName,
              final String guestName, final List<Answer> answers) throws ErrorMessageException {
 
@@ -64,6 +65,9 @@ public class ResultService extends ProxyCacher<IResultService> implements IResul
         // get the test
         final Test test = testOptional.get();
 
+        //all get all the correct answers for the incorrect answers
+        final List<Question> incorrect = new ArrayList<>();
+
         //calculate the number of points
         int totalScore = 0, correctAnswers = 0;
         for (final Answer answer : answers) {
@@ -73,6 +77,7 @@ public class ResultService extends ProxyCacher<IResultService> implements IResul
             );
             if (!questionComparer.equal(
                     answer.getQuestionAnswer(), question.getAnswer())) {
+                incorrect.add(question);
                 continue;
             }
 
@@ -85,6 +90,8 @@ public class ResultService extends ProxyCacher<IResultService> implements IResul
         testRepository.addTestResult(
                 testName, guestName, totalScore, correctAnswers
         );
+
+        return new TestOverview(correctAnswers, totalScore, incorrect);
     }
 
 
