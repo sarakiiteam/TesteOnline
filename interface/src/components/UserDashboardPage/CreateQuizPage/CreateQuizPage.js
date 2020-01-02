@@ -1,30 +1,28 @@
 import React, { useState, useContext } from 'react';
 
-import UserDetails from './UserDetails/UserDetailsForm';
-import WrapperComponent from '../WrapperComponent/WrapperComponent';
-import Quiz from './QuizComponent/QuizComponent';
+import WrapperComponent from '../../WrapperComponent/WrapperComponent';
 
-import './QuizPage.css';
+import './CreateQuiz.css';
 
 import { Card, Container } from 'semantic-ui-react';
-import { Context as QuizPageContext } from '../../Contexts/QuizPageContext';
-import CountdownTimer from 'react-component-countdown-timer';
+import QuizDetails from './QuizDetailsComponent';
 
-const QuizPage = () => {
-	const quizPageContext = useContext(QuizPageContext);
-	const { userDetailsFilled, quiz } = quizPageContext;
+import { Context as DashboardContext } from '../../../Contexts/UserDashboardContext';
 
-	const { title, questions } = quiz;
+const CreateQuizPage = () => {
+	const dashboardContext = useContext(DashboardContext);
+
+	const { quizDetailsFilled, setQuizDetailsFilled } = dashboardContext;
 
 	return (
 		<WrapperComponent>
-			{!userDetailsFilled ? (
+			{quizDetailsFilled ? (
 				<Container className="userPage">
 					<Card>
 						<Card.Content>
-							<Card.Header>{'Who are you?'}</Card.Header>
+							<Card.Header>{'Quiz Details'}</Card.Header>
 							<br />
-							<UserDetails />
+							<QuizDetails />
 						</Card.Content>
 					</Card>
 				</Container>
@@ -34,7 +32,6 @@ const QuizPage = () => {
 						<Card.Content>
 							<Card.Header>{title}</Card.Header>
 							<br />
-							<Quiz />
 						</Card.Content>
 					</Card>
 					<Card className="timerDiv">
@@ -57,4 +54,4 @@ const QuizPage = () => {
 	);
 };
 
-export default QuizPage;
+export default CreateQuizPage;

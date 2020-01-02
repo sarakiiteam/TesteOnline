@@ -4,15 +4,14 @@ import PropTypes from 'prop-types';
 const Context = createContext();
 
 const Provider = ({ children }) => {
-	const [deviceWidth, setDeviceWidth] = useState(window.innerWidth);
-	const [deviceHeight, setDeviceHeight] = useState(window.innerHeight);
-	const [selectedQuiz, setSelectedQuiz] = useState(null);
+	const [ deviceWidth, setDeviceWidth ] = useState(window.innerWidth);
+	const [ deviceHeight, setDeviceHeight ] = useState(window.innerHeight);
+	const [ selectedQuiz, setSelectedQuiz ] = useState(null);
+	const [ hasAccount, setHasAccount ] = useState(true);
 
 	useEffect(() => {
-		window.addEventListener('resize', data => {
-			const {
-				target: { innerWidth, innerHeight }
-			} = data;
+		window.addEventListener('resize', (data) => {
+			const { target: { innerWidth, innerHeight } } = data;
 
 			setDeviceWidth(innerWidth);
 			setDeviceHeight(innerHeight);
@@ -26,9 +25,11 @@ const Provider = ({ children }) => {
 				deviceHeight,
 				deviceWidth,
 				selectedQuiz,
+				hasAccount,
 
 				// METHODS
-				setSelectedQuiz
+				setSelectedQuiz,
+				setHasAccount
 			}}
 		>
 			{children}
