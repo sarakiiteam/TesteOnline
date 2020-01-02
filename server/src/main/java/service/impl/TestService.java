@@ -65,7 +65,11 @@ public class TestService extends ProxyCacher<ITestService> implements ITestServi
     )
     public synchronized void addQuestion(
             final String testName,
-            final String question, final String answer, final int points) throws ErrorMessageException {
+            final String question,
+            final String correctAnswer,
+            final String firstWrongAnswer,
+            final String secondWrongAnswer,
+            final int points) throws ErrorMessageException {
 
         final Optional<Test> testOptional = testRepository.getTestByName(testName);
         if (!testOptional.isPresent()) {
@@ -77,7 +81,10 @@ public class TestService extends ProxyCacher<ITestService> implements ITestServi
         final Test test = testOptional.get();
         test.addQuestion(
                 new Question(
-                        question, answer, points
+                        question,
+                        correctAnswer,
+                        firstWrongAnswer,
+                        secondWrongAnswer, points
                 )
         );
         asAbstractRepository(testRepository).update(test);
@@ -121,7 +128,7 @@ public class TestService extends ProxyCacher<ITestService> implements ITestServi
                 .stream()
                 .map(Test::getQuestions)
                 .flatMap(Set::stream)
-                .map(Question::getAnswer)
+                .map(Question::getCorrectAnswer)
                 .collect(Collectors.toSet());
 
         if (answers.isEmpty()) {

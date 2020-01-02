@@ -17,8 +17,13 @@ public class Question {
     private String question;
 
     @Column(length = MAX_LENGTH)
-    @JsonIgnore
-    private String answer;
+    private String correctAnswer;
+
+    @Column(length = MAX_LENGTH)
+    private String firstWrongAnswer;
+
+    @Column(length = MAX_LENGTH)
+    private String secondWrongAnswer;
 
     @Column
     private int points;
@@ -28,9 +33,14 @@ public class Question {
     @JsonIgnore
     private Test test;
 
-    public Question(String question, String answer, int points) {
+    public Question(final String question,
+                    final String correctAnswer,
+                    final String firstWrongAnswer,
+                    final String secondWrongAnswer, final int points) {
         this.question = question;
-        this.answer = answer;
+        this.correctAnswer = correctAnswer;
+        this.firstWrongAnswer = firstWrongAnswer;
+        this.secondWrongAnswer = secondWrongAnswer;
         this.points = points;
     }
 
@@ -49,12 +59,12 @@ public class Question {
         this.question = question;
     }
 
-    public String getAnswer() {
-        return answer;
+    public String getCorrectAnswer() {
+        return correctAnswer;
     }
 
-    public void setAnswer(String answer) {
-        this.answer = answer;
+    public void setCorrectAnswer(String correctAnswer) {
+        this.correctAnswer = correctAnswer;
     }
 
     public int getPoints() {
@@ -73,4 +83,19 @@ public class Question {
         this.test = test;
     }
 
+    public String getFirstWrongAnswer() {
+        return firstWrongAnswer;
+    }
+
+    public void setFirstWrongAnswer(String firstWrongAnswer) {
+        this.firstWrongAnswer = firstWrongAnswer;
+    }
+
+    public String getSecondWrongAnswer() {
+        return secondWrongAnswer;
+    }
+
+    public void setSecondWrongAnswer(String secondWrongAnswer) {
+        this.secondWrongAnswer = secondWrongAnswer;
+    }
 }

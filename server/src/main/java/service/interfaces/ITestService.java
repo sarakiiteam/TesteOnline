@@ -5,8 +5,11 @@ import database.models.Test;
 import database.models.enums.Difficulty;
 import utils.exceptions.ErrorMessageException;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public interface ITestService {
 
@@ -26,12 +29,18 @@ public interface ITestService {
      * Add a new question to a specific test
      * @param testName: the name of test
      * @param question: the text of the question
-     * @param answer: the text of the answer
+     * @param correctAnswer: the text of the answer
+     * @param firstWrongAnswer: the text of the first wrong answer
+     * @param secondWrongAnswer: the text of the second wrong answer
      * @param points: the number of points
      */
     void addQuestion(
             final String testName,
-            final String question, final String answer, final int points) throws ErrorMessageException;
+            final String question,
+            final String correctAnswer,
+            final String firstWrongAnswer,
+            final String secondWrongAnswer,
+            final int points) throws ErrorMessageException;
 
     /**
      * Returns a list of test questions

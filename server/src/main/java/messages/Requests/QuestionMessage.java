@@ -1,21 +1,22 @@
 package messages.Requests;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 
 public class QuestionMessage implements Serializable {
 
     private String question;
-    private String answer;
-
     private int points = -1;
 
+    @JsonProperty("answer")
+    private String correctAnswer;
 
-    public QuestionMessage(
-            final String question, final String answer, final int points) {
-        this.question = question;
-        this.answer = answer;
-        this.points = points;
-    }
+    @JsonProperty("wrong1")
+    private String firstWrongAnswer;
+
+    @JsonProperty("wrong2")
+    private String secondWrongAnswer;
 
     public QuestionMessage() {
     }
@@ -28,12 +29,12 @@ public class QuestionMessage implements Serializable {
         this.question = question;
     }
 
-    public String getAnswer() {
-        return answer;
+    public String getCorrectAnswer() {
+        return correctAnswer;
     }
 
-    public void setAnswer(String answer) {
-        this.answer = answer;
+    public void setCorrectAnswer(String correctAnswer) {
+        this.correctAnswer = correctAnswer;
     }
 
     public int getPoints() {
@@ -42,5 +43,21 @@ public class QuestionMessage implements Serializable {
 
     public void setPoints(int points) {
         this.points = points;
+    }
+
+    public String getFirstWrongAnswer() {
+        return firstWrongAnswer;
+    }
+
+    public void setFirstWrongAnswer(String firstWrongAnswer) {
+        this.firstWrongAnswer = firstWrongAnswer;
+    }
+
+    public String getSecondWrongAnswer() {
+        return secondWrongAnswer;
+    }
+
+    public void setSecondWrongAnswer(String secondWrongAnswer) {
+        this.secondWrongAnswer = secondWrongAnswer;
     }
 }
