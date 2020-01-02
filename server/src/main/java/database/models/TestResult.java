@@ -1,6 +1,7 @@
 package database.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
 
@@ -22,6 +23,7 @@ public class TestResult {
     private int correctAnswers;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JoinColumn(name = "testId")
     private Test test;
 

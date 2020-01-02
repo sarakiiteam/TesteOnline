@@ -17,6 +17,7 @@ import utils.controllers.IModelChecker;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/results")
@@ -40,26 +41,43 @@ public class ResultController {
     }
 
     /**
-     * This method is responsible for getting all answers existent in database
+     * This method is responsible for getting all the results for a specific test
      * method type: GET
-     * base call: http://localhost:8080/api/results/available
+     * base call: http://localhost:8080/api/results/da-test
      *
      * @return a message like this
      * {
-     * "answers": [
-     * "0",
-     * "mere",
-     * "pere"
+     * "results": [
+     * {
+     * "guestName": "eduard",
+     * "guestPoints": 1752,
+     * "correctAnswers": 2
+     * },
+     * {
+     * "guestName": "mariano",
+     * "guestPoints": 1755,
+     * "correctAnswers": 5
+     * }
      * ]
      * }
      */
-    @GetMapping(value = "/available")
-    public ResponseEntity<?> getAllAvailableAnswers() {
+    @GetMapping(value = "/{testName}")
+    public ResponseEntity<?> getResultsTo(@PathVariable String testName) {
 
-        final Map<String, List<String>> answers = new TreeMap<>();
-        answers.put("answers", testService.getAllAvailableAnswers());
+        //get all test results for a specific test
+        final List<TestResult> testResults = resultService
+                .getTestResultsByCondition(
+                        x -> x.getTest().getTestName().equals(testName));
 
-        return new ResponseEntity<>(answers, HttpStatus.OK);
+        return new ResponseEntity<>(
+                new TreeMap<String, List<TestResult>>() {{
+                    put("results",
+                            testResults
+                                    .stream()
+                                    .peek(test -> test.setTest(null))
+                                    .collect(Collectors.toList()));
+                }},
+                HttpStatus.OK);
     }
 
 
