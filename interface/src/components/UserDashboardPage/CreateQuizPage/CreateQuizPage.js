@@ -16,7 +16,7 @@ const CreateQuizPage = () => {
 
 	return (
 		<WrapperComponent>
-			{quizDetailsFilled ? (
+			{!quizDetailsFilled && (
 				<Container className="userPage">
 					<Card>
 						<Card.Content>
@@ -26,8 +26,10 @@ const CreateQuizPage = () => {
 						</Card.Content>
 					</Card>
 				</Container>
-			) : (
-				<Card.Group className="quizPage">
+			)
+
+			/**
+        < Card.Group className="quizPage">
 					<Card className="quizDiv">
 						<Card.Content>
 							<Card.Header>{title}</Card.Header>
@@ -49,7 +51,8 @@ const CreateQuizPage = () => {
 						/>
 					</Card>
 				</Card.Group>
-			)}
+		 */
+			}
 		</WrapperComponent>
 	);
 };
