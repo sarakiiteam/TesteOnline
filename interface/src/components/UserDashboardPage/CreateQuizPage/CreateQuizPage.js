@@ -12,11 +12,11 @@ import { Context as DashboardContext } from '../../../Contexts/UserDashboardCont
 const CreateQuizPage = () => {
 	const dashboardContext = useContext(DashboardContext);
 
-	const { quizDetailsFilled, setQuizDetailsFilled } = dashboardContext;
+	const { quizDetailsFilled, quizQuestions } = dashboardContext;
 
 	return (
 		<WrapperComponent>
-			{!quizDetailsFilled && (
+			{!quizDetailsFilled ? (
 				<Container className="userPage">
 					<Card>
 						<Card.Content>
@@ -26,33 +26,20 @@ const CreateQuizPage = () => {
 						</Card.Content>
 					</Card>
 				</Container>
-			)
-
-			/**
-        < Card.Group className="quizPage">
+			) : (
+				<Card.Group className="quizPage">
 					<Card className="quizDiv">
 						<Card.Content>
-							<Card.Header>{title}</Card.Header>
+							<Card.Header>{'Questions'}</Card.Header>
 							<br />
+							{}
 						</Card.Content>
 					</Card>
 					<Card className="timerDiv">
 						<h3>Time</h3>
-						<CountdownTimer
-							className="timer"
-							count={30 * questions.length}
-							hideDay
-							hideHours
-							size={30}
-							onEnd={() => {
-								// send data
-							}}
-							responsive={true}
-						/>
 					</Card>
 				</Card.Group>
-		 */
-			}
+			)}
 		</WrapperComponent>
 	);
 };

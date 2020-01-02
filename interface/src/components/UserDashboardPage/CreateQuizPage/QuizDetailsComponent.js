@@ -1,27 +1,32 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 
 import { Form, Button, TextArea, Select } from 'semantic-ui-react';
-import WrapperComponent from '../../WrapperComponent/WrapperComponent';
-// import { Context as QuizPageContext } from '../../../Contexts/QuizPageContext';
+import { Context as DashboardContext } from '../../../Contexts/UserDashboardContext';
 
 const QuizDetails = () => {
-	// const quizPageContext = useContext(QuizPageContext);
-	// const { QuizDetailsFilled, setQuizDetailsFilled } = quizPageContext;
+	const dashboardContext = useContext(DashboardContext);
+	const { setQuizDetailsFilled } = dashboardContext;
+	const [ quizDetails, setQuizDetails ] = useState({
+		name: '',
+		difficulty: 'EASY',
+		description: ''
+		// username: '' get from localstorage
+	});
 
 	const options = [
 		{
 			key: 'easy',
-			value: 'easy',
+			value: 'EASY',
 			text: 'EASY'
 		},
 		{
 			key: 'medium',
-			value: 'medium',
+			value: 'MEDIUM',
 			text: 'MEDIUM'
 		},
 		{
 			key: 'hard',
-			value: 'hard',
+			value: 'HARD',
 			text: 'HARD'
 		}
 	];
@@ -29,21 +34,43 @@ const QuizDetails = () => {
 	return (
 		<Form>
 			<Form.Field>
-				<input placeholder="Test Name" />
+				<input
+					placeholder="Name"
+					onChange={(event) =>
+						setQuizDetails({
+							...quizDetails,
+							['name']: event.target.value
+						})}
+				/>
 			</Form.Field>
 			{/* username to be took from localstorage (as token) */}
 			<Form.Field>
-				<Select placeholder="Difficulty" options={options} />
+				<Select
+					placeholder="Difficulty"
+					options={options}
+					onChange={(event, data) =>
+						setQuizDetails({
+							...quizDetails,
+							['difficulty']: data.value
+						})}
+				/>
 			</Form.Field>
 			<Form.Field>
-				<TextArea placeholder="Description" />
+				<TextArea
+					placeholder="Description"
+					onChange={(event, data) =>
+						setQuizDetails({
+							...quizDetails,
+							['description']: data.value
+						})}
+				/>
 			</Form.Field>
 			<br />
 			<Button
 				type="submit"
 				onClick={() => {
 					// TODO: validare campuri
-					// setQuizDetailsFilled(true);
+					setQuizDetailsFilled(true);
 				}}
 			>
 				To Questions!

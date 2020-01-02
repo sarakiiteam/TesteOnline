@@ -5,14 +5,17 @@ const Context = createContext();
 
 const Provider = ({ children }) => {
 	const [ quizDetailsFilled, setQuizDetailsFilled ] = useState(false);
+	const [ quizQuestions, setQuizQuestions ] = useState([]);
 
 	return (
 		<Context.Provider
 			value={{
 				// VALUES
 				quizDetailsFilled,
+				quizQuestions,
 				// METHODS
-				setQuizDetailsFilled
+				setQuizDetailsFilled,
+				setQuizQuestions
 			}}
 		>
 			{children}
