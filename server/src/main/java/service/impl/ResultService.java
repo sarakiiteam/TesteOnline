@@ -20,7 +20,6 @@ import utils.service.IQuestionComparer;
 
 import java.util.*;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 @Component
 @Cacheable
@@ -76,7 +75,7 @@ public class ResultService extends ProxyCacher<IResultService> implements IResul
                     answer.getQuestionId()
             );
             if (!questionComparer.equal(
-                    answer.getQuestionAnswer(), question.getAnswer())) {
+                    answer.getQuestionAnswer(), question.getCorrectAnswer())) {
                 incorrect.add(question);
                 continue;
             }

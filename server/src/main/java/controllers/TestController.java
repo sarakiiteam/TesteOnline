@@ -1,7 +1,6 @@
 package controllers;
 
 import cache.proxies.ProxyCacher;
-import database.models.Question;
 import database.models.Test;
 import messages.Message;
 import messages.Requests.QuestionMessage;
@@ -43,20 +42,21 @@ public class TestController {
      * This method is responsible for adding a test into database
      * method type: POST
      * base call: http://localhost:8080/api/tests/add
+     *
      * @param message: the input data that is necessary for the call (it looks like this)
-            {
-                "username": "username",
-                "testName":"test",
-                "difficulty": "MEDIUM" or "EASY" or "HARD"
-            }
+     *                 {
+     *                 "username": "username",
+     *                 "testName":"test",
+     *                 "difficulty": "MEDIUM" or "EASY" or "HARD"
+     *                 }
      * @return a message like this
-            {
-              "code": "status code",
-              "msg": "message"
-            }
+     * {
+     * "code": "status code",
+     * "msg": "message"
+     * }
      */
     @PostMapping(value = "/add")
-    public ResponseEntity<?> registerUser(@RequestBody TestMessage message) {
+    public ResponseEntity<?> addTest(@RequestBody TestMessage message) {
 
         //check the model validity
         final Map.Entry<Boolean, String> validationResult = modelChecker.isModelValid(message);
@@ -101,25 +101,26 @@ public class TestController {
      * This method is responsible for getting all tests from database
      * method type: GET
      * base call: http://localhost:8080/api/tests/users
+     *
      * @return a message like this
-        {
-            "tests": [
-                {
-                    "testName": "test1",
-                    "testDifficulty": "MEDIUM",
-                    "proposedBy": {
-                        "usern": "eduard"
-                    }
-                },
-                {
-                    "testName": "test1",
-                    "testDifficulty": "MEDIUM",
-                    "proposedBy": {
-                        "usern": "eduard"
-                    }
-                },
-            ]
-        }
+     * {
+     * "tests": [
+     * {
+     * "testName": "test1",
+     * "testDifficulty": "MEDIUM",
+     * "proposedBy": {
+     * "usern": "eduard"
+     * }
+     * },
+     * {
+     * "testName": "test1",
+     * "testDifficulty": "MEDIUM",
+     * "proposedBy": {
+     * "usern": "eduard"
+     * }
+     * },
+     * ]
+     * }
      */
     @GetMapping(value = "/users")
     public ResponseEntity<?> getAllTests() {
@@ -134,18 +135,19 @@ public class TestController {
      * This method is responsible for getting all tests posted by a specific user
      * method type: GET
      * base call: http://localhost:8080/api/tests/users/username
+     *
      * @param username: the user's username
      * @return a object like this
      * {
-     *     "tests": [
-     *         {
-     *             "testName": "test",
-     *             "testDifficulty": "MEDIUM",
-     *             "proposedBy": {
-     *                 "usern": "usern"
-     *             }
-     *         }
-     *     ]
+     * "tests": [
+     * {
+     * "testName": "test",
+     * "testDifficulty": "MEDIUM",
+     * "proposedBy": {
+     * "usern": "usern"
+     * }
+     * }
+     * ]
      * }
      */
     @GetMapping(value = "/users/{username}")
@@ -172,28 +174,30 @@ public class TestController {
      * This method is responsible for getting all questions for a specific test
      * method type: GET
      * base call: http://localhost:8080/api/tests/testName/questions
+     *
      * @param testName: the name of the test
      * @return a message like this
      * {
-     *     "questions": [
-     *         {
-     *             "question": "ce are ana?",
-     *             "points": 100
-     *         },
-     *         {
-     *             "question": "ce avea ana?",
-     *             "points": 140
-     *         }
-     *     ]
+     * "questions": [
+     * {
+     * "question": "ce are ana?",
+     * "points": 100
+     * },
+     * {
+     * "question": "ce avea ana?",
+     * "points": 140
+     * }
+     * ]
      * }
      */
     @GetMapping(value = "/{testName}/questions")
     public ResponseEntity<?> getTestQuestions(@PathVariable String testName) {
-
-        final Map<String, List<Question>> questions = new TreeMap<>();
-        questions.put("questions", testService.getQuestionsForTest(testName));
-
-        return new ResponseEntity<>(questions, HttpStatus.OK);
+        return new ResponseEntity<>(
+                new TreeMap<String, Object>() {{
+                    put("questions",  testService.getQuestionsForTest(testName));
+                }},
+                HttpStatus.OK
+        );
     }
 
 
@@ -201,19 +205,20 @@ public class TestController {
      * This method is responsible for adding a test into database
      * method type: POST
      * base call: http://localhost:8080/api/tests/testName/questions/add
+     *
      * @param testName: the name of test we want to add the question
-     * @param message: the input data that is necessary for the call (it looks like this)
-            {
-                "username": "username",
-                "question":"cati ani ai daca nu te-ai nascut?",
-                "answer": "0",
-                "points": 100
-            }
+     * @param message:  the input data that is necessary for the call (it looks like this)
+     *                  {
+     *                  "username": "username",
+     *                  "question":"cati ani ai daca nu te-ai nascut?",
+     *                  "answer": "0",
+     *                  "points": 100
+     *                  }
      * @return a message like this
-            {
-                "code": "CREATED",
-                "msg": "Question added successfully"
-            }
+     * {
+     * "code": "CREATED",
+     * "msg": "Question added successfully"
+     * }
      */
     @PostMapping(value = "/{testName}/questions/add")
     public ResponseEntity<?> addQuestionToTest(@PathVariable String testName,
@@ -235,7 +240,10 @@ public class TestController {
 
             testService.addQuestion(
                     testName,
-                    message.getQuestion(), message.getAnswer(), message.getPoints()
+                    message.getQuestion(),
+                    message.getCorrectAnswer(),
+                    message.getFirstWrongAnswer(),
+                    message.getSecondWrongAnswer(), message.getPoints()
             );
         } catch (final Exception ex) {
             return new ResponseEntity<>(
