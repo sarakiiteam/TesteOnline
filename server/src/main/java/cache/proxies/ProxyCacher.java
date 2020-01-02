@@ -24,7 +24,6 @@ public abstract class ProxyCacher<T> implements ICacheableProxy<T> {
      * @param cacheResolver: the object that is delegated to make memory cache-ing
      * @throws RuntimeException if cache resolver is not instantiated
      */
-    @Autowired
     protected ProxyCacher(final ICacheResolver<T> cacheResolver) {
 
         if (cacheResolver == null) {
