@@ -42,6 +42,7 @@ const Quiz = () => {
           </Form.Group>
         ))}
       </Form>
+      <br />
       <Button>What's the score?!</Button>
     </>
   );

@@ -1,13 +1,19 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Card, Button } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import './Dashboard.css';
 
+import { Context as Appcontext } from '../../Contexts/AppContext';
+
 const UserQuizCard = ({ name, difficulty, description }) => {
+	const appContext = useContext(Appcontext);
+
+	const { history } = appContext;
+
 	const getQuiz = () => {
-		// fetch the specific quiz
+		// fetch the specific quiz and set it to context
 	};
 
 	return (
@@ -24,20 +30,20 @@ const UserQuizCard = ({ name, difficulty, description }) => {
 						color="green"
 						onClick={() => {
 							getQuiz();
+							history.push('/quiz-results');
 						}}
 					>
-						<Link to="/quiz-results">Results</Link>
+						Results
 					</Button>
 					<Button
 						basic
 						color="black"
 						onClick={() => {
 							getQuiz();
+							history.push('/add-questions');
 						}}
 					>
-						<Link to="/add-questions" className="addQuestionsButton">
-							Add questions
-						</Link>
+						Add questions
 					</Button>
 				</div>
 			</Card.Content>

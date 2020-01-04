@@ -1,3 +1,5 @@
 .ui.cards.quizzesStyle {
-  margin-top: 80px;
+	margin: 0;
+	overflow: hidden;
+	padding: 0;
 }
