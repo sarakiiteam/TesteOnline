@@ -39,6 +39,18 @@ const ResultsPage = () => {
 	]);
 
 	useEffect(() => {
+		fetch('http://localhost:8080/api/results/da-test', {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				'Access-Control-Allow-Origin': '*'
+			},
+			mode: 'no-cors'
+		})
+			// .then((data) => JSON.parse(data))
+			.then((parsedData) => console.log(parsedData))
+			.catch((error) => console.log(error));
+
 		// call after results
 		// fill results list
 	}, []);
