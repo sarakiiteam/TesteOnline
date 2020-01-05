@@ -6,53 +6,18 @@ import './CreateQuiz.css';
 
 import { Card, Table } from 'semantic-ui-react';
 
-import { Context as QuizContext } from '../../../Contexts/QuizPageContext';
-
 const ResultsPage = () => {
-	const quizContext = useContext(QuizContext);
-	const [ results, setResults ] = useState([
-		{
-			guestName: 'eduard',
-			guestPoints: 1752,
-			correctAnswers: 2
-		},
-		{
-			guestName: 'mariano',
-			guestPoints: 1755,
-			correctAnswers: 5
-		},
-		{
-			guestName: 'IONUTAO',
-			guestPoints: 1755,
-			correctAnswers: 5
-		},
-		{
-			guestName: 'gigel',
-			guestPoints: 1755,
-			correctAnswers: 5
-		},
-		{
-			guestName: 'sorinho',
-			guestPoints: 1755,
-			correctAnswers: 5
-		}
-	]);
+	const [ results, setResults ] = useState([]);
+	const [ testName, setTestName ] = useState('da-test');
 
 	useEffect(() => {
-		fetch('http://localhost:8080/api/results/da-test', {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-				'Access-Control-Allow-Origin': '*'
-			},
-			mode: 'no-cors'
-		})
-			// .then((data) => JSON.parse(data))
-			.then((parsedData) => console.log(parsedData))
+		fetch(`http://localhost:8080/api/results/${testName}`)
+			.then((data) => data.json())
+			.then((parsedData) => {
+				console.log(parsedData);
+				setResults(parsedData['results']);
+			})
 			.catch((error) => console.log(error));
-
-		// call after results
-		// fill results list
 	}, []);
 
 	return (

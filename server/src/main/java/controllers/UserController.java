@@ -12,6 +12,7 @@ import utils.controllers.IModelChecker;
 
 import java.util.Map;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/user")
 @ComponentScan(

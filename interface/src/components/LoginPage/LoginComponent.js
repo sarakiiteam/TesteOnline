@@ -15,6 +15,26 @@ const LoginComponent = () => {
 		password: ''
 	});
 
+	const handleLogin = () => {
+		fetch(`http://localhost:8080/api/user/login`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(userCredentials)
+		})
+			.then((data) => data.json())
+			.then((parsedData) => {
+				if (parsedData['code'] === 'OK') {
+					sessionStorage.setItem('username', userCredentials['username']);
+					history.push('/user-quizzes');
+					return;
+				}
+				console.log('EROARE');
+			})
+			.catch((error) => console.log(error));
+	};
+
 	return (
 		<React.Fragment>
 			<Header>{'Who are you?'}</Header>
@@ -51,8 +71,7 @@ const LoginComponent = () => {
 					type="submit"
 					onClick={() => {
 						// TODO: validare campuri
-						sessionStorage.setItem('username', userCredentials['username']);
-						history.push('/user-quizzes');
+						handleLogin();
 					}}
 				>
 					Login
