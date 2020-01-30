@@ -4,10 +4,6 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 const QuizCard = ({ name, difficulty, authorName, description }) => {
-  const getQuiz = () => {
-    // fetch the specific quiz
-  };
-
   return (
     <Card>
       <Card.Content>
