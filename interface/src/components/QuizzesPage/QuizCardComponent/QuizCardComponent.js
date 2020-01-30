@@ -1,7 +1,7 @@
-import React from "react";
-import { Card, Button } from "semantic-ui-react";
-import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Card, Button } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 const QuizCard = ({ name, difficulty, authorName, description }) => {
   const getQuiz = () => {
@@ -18,11 +18,11 @@ const QuizCard = ({ name, difficulty, authorName, description }) => {
         <Card.Description>{description}</Card.Description>
       </Card.Content>
       <Card.Content extra>
-        <Link to="/quiz">
-          <div className="ui two buttons">
+        <Link to='/quiz'>
+          <div className='ui two buttons'>
             <Button
               basic
-              color="green"
+              color='green'
               onClick={() => {
                 getQuiz();
               }}
@@ -38,7 +38,7 @@ const QuizCard = ({ name, difficulty, authorName, description }) => {
 
 QuizCard.propTypes = {
   name: PropTypes.string.isRequired,
-  difficulty: PropTypes.number.isRequired,
+  difficulty: PropTypes.string.isRequired,
   authorName: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired
 };

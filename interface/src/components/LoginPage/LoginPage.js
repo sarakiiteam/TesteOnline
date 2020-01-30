@@ -10,19 +10,21 @@ import { Context as AppContext } from '../../Contexts/AppContext';
 import './Login.css';
 
 const LoginPage = () => {
-	const appContext = useContext(AppContext);
+  const appContext = useContext(AppContext);
 
-	const { hasAccount, setHasAccount } = appContext;
+  const { hasAccount } = appContext;
 
-	return (
-		<WrapperComponent>
-			<Container className="userPage">
-				<Card>
-					<Card.Content>{hasAccount ? <LoginComponent /> : <RegisterComponent />}</Card.Content>
-				</Card>
-			</Container>
-		</WrapperComponent>
-	);
+  return (
+    <WrapperComponent>
+      <Container className='userPage'>
+        <Card>
+          <Card.Content>
+            {hasAccount ? <LoginComponent /> : <RegisterComponent />}
+          </Card.Content>
+        </Card>
+      </Container>
+    </WrapperComponent>
+  );
 };
 
 export default LoginPage;

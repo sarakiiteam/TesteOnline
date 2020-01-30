@@ -5,6 +5,12 @@ const Context = createContext();
 
 const Provider = ({ children }) => {
   const [quizResponse, setQuizResponse] = useState({});
+
+  const [resultDetails, setResultDetails] = useState({
+    answers: [],
+    guestName: '',
+    testName: ''
+  });
   const [userDetailsFilled, setUserDetailsFilled] = useState(false);
 
   const [quizDetailsFilled, setQuizDetailsFilled] = useState(false);
@@ -115,12 +121,14 @@ const Provider = ({ children }) => {
         quiz,
         quizDetailsFilled,
         quizQuestions,
+        resultDetails,
 
         // METHODS
         setQuizResponse,
         setUserDetailsFilled,
         setQuizDetailsFilled,
-        setQuizQuestions
+        setQuizQuestions,
+        setResultDetails
       }}
     >
       {children}
