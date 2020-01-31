@@ -12,9 +12,7 @@ import CountdownTimer from 'react-component-countdown-timer';
 
 const QuizPage = () => {
   const quizPageContext = useContext(QuizPageContext);
-  const { userDetailsFilled, quiz } = quizPageContext;
-
-  const { title, questions } = quiz;
+  const { userDetailsFilled, quizTitle, quizQuestions } = quizPageContext;
 
   return (
     <WrapperComponent>
@@ -32,7 +30,7 @@ const QuizPage = () => {
         <Card.Group className='quizPage'>
           <Card className='quizDiv'>
             <Card.Content>
-              <Card.Header>{title}</Card.Header>
+              <Card.Header>{quizTitle}</Card.Header>
               <br />
               <Quiz />
             </Card.Content>
@@ -41,7 +39,7 @@ const QuizPage = () => {
             <h3>Time</h3>
             <CountdownTimer
               className='timer'
-              count={30 * questions.length}
+              count={30 * quizQuestions.length}
               hideDay
               hideHours
               size={30}

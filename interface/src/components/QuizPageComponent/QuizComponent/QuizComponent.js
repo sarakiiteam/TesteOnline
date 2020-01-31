@@ -8,32 +8,33 @@ import './QuizComponent.css';
 const Quiz = () => {
   const quizPageContext = useContext(QuizPageContext);
 
-  const { quiz } = quizPageContext;
-  const { questions } = quiz;
+  const { quizQuestions } = quizPageContext;
 
   return (
     <>
       <Form className='quizForm'>
-        {questions.map((question, index) => (
+        {quizQuestions.map((question, index) => (
           <Form.Group grouped key={index} className='question'>
-            <h5>{question.title}</h5>
-
+            <h5>
+              {index + 1}.) &nbsp;
+              {question['question']} - <i>{question['points']} points</i>
+            </h5>
             <Form.Field
               control='input'
-              label={question.answers[0]}
+              label={question['correctAnswer']}
               name='answer'
               type='radio'
             />
             <Form.Field
               control='input'
-              label={question.answers[1]}
+              label={question['firstWrongAnswer']}
               name='answer'
               type='radio'
               className='correctAnswer'
             />
             <Form.Field
               control='input'
-              label={question.answers[2]}
+              label={question['secondWrongAnswer']}
               name='answer'
               type='radio'
               className='wrongAnswer'

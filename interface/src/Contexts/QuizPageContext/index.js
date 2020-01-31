@@ -66,51 +66,7 @@ const Provider = ({ children }) => {
     }
   ]);
 
-  const [quiz, setQuiz] = useState({
-    title: 'Quiz1',
-    questions: [
-      {
-        title: 'Question1',
-        answers: ['Answer1', 'Answer2', 'Answer3']
-      },
-      {
-        title: 'Question2',
-        answers: ['Answer1', 'Answer2', 'Answer3']
-      },
-      {
-        title: 'Question3',
-        answers: ['Answer1', 'Answer2', 'Answer3']
-      },
-      {
-        title: 'Question4',
-        answers: ['Answer1', 'Answer2', 'Answer3']
-      },
-      {
-        title: 'Question5',
-        answers: ['Answer1', 'Answer2', 'Answer3']
-      },
-      {
-        title: 'Question6',
-        answers: ['Answer1', 'Answer2', 'Answer3']
-      },
-      {
-        title: 'Question7',
-        answers: ['Answer1', 'Answer2', 'Answer3']
-      },
-      {
-        title: 'Question8',
-        answers: ['Answer1', 'Answer2', 'Answer3']
-      },
-      {
-        title: 'Question9',
-        answers: ['Answer1', 'Answer2', 'Answer3']
-      },
-      {
-        title: 'Question10',
-        answers: ['Answer1', 'Answer2', 'Answer3']
-      }
-    ]
-  });
+  const [quizTitle, setQuizTitle] = useState('');
 
   return (
     <Context.Provider
@@ -118,17 +74,18 @@ const Provider = ({ children }) => {
         // VALUES
         quizResponse,
         userDetailsFilled,
-        quiz,
         quizDetailsFilled,
         quizQuestions,
         resultDetails,
+        quizTitle,
 
         // METHODS
         setQuizResponse,
         setUserDetailsFilled,
         setQuizDetailsFilled,
         setQuizQuestions,
-        setResultDetails
+        setResultDetails,
+        setQuizTitle
       }}
     >
       {children}
