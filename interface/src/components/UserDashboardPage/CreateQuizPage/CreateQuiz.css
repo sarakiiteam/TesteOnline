@@ -1,30 +1,43 @@
-.ui.cards.quizPage {
+.ui.cards.createQuizCards {
 	width: auto;
 	margin: 8% 20%;
 }
 
-.ui.container.userPage {
-	/* width: 300px; */
+.ui.container.quizDetails {
 	margin-top: 10%;
 }
 
-.ui.card.quizDiv {
-	width: 80%;
-	height: 500px;
-	box-shadow: 2px 2px black;
+.ui.card.quizQuestionsDiv {
+	width: 50%;
+	height: auto;
 }
 
-.ui.card.timerDiv {
-	margin-top: 30%;
+.questionsDiv {
+	overflow-y: scroll;
+	height: 300px;
+}
+
+.ui.card.addQuestionDiv {
 	text-align: center;
 	vertical-align: middle;
 	align-content: center;
-	width: 15%;
-	height: 100px;
-	padding: 0;
-	box-shadow: 2px 2px black;
+	width: 45%;
+	padding: 5px;
 }
 
-.timer {
-	margin-top: 10px;
+.question {
+	text-align: left;
+}
+
+.correctAnswer {
+	color: green;
+}
+
+.ui.form.formAddQuestion {
+	margin-top: 10%;
+}
+
+.ui.card.resultsDiv {
+	width: auto;
+	margin: 8% 20%;
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Pagination, Divider } from 'semantic-ui-react';
+import { Card, Divider } from 'semantic-ui-react';
 
 import WrapperComponent from '../WrapperComponent/WrapperComponent';
 
@@ -79,7 +79,6 @@ const UserQuizzes = () => {
 				))}
 			</Card.Group>
 			<Divider />
-			<Pagination defaultActivePage={1} totalPages={3} />
 		</WrapperComponent>
 	);
 };

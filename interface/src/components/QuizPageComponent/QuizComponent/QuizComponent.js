@@ -1,49 +1,136 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
-import { Form, Button, Divider } from 'semantic-ui-react';
+import { Form, Button, Divider, Radio } from 'semantic-ui-react';
 import { Context as QuizPageContext } from '../../../Contexts/QuizPageContext';
 
 import './QuizComponent.css';
 
 const Quiz = () => {
-  const quizPageContext = useContext(QuizPageContext);
+	const quizPageContext = useContext(QuizPageContext);
+	const {
+		quizQuestions,
+		resultDetails,
+		setResultDetails,
+		setResults,
+		setCheckingResults,
+		setIsSolved,
+		setErrorResults,
+		timeIsUp
+	} = quizPageContext;
 
-  const { quiz } = quizPageContext;
-  const { questions } = quiz;
+	const [ answers, setAnswers ] = useState([]);
 
-  return (
-    <>
-      <Form className='quizForm'>
-        {questions.map((question, index) => (
-          <Form.Group grouped key={index} className='question'>
-            <h5>{question.title}</h5>
+	useEffect(() => {
+		setIsSolved(false);
+	}, []);
 
-            <Form.Field
-              control='input'
-              label={question.answers[0]}
-              name='answer'
-              type='radio'
-            />
-            <Form.Field
-              control='input'
-              label={question.answers[1]}
-              name='answer'
-              type='radio'
-              className='correctAnswer'
-            />
-            <Form.Field
-              control='input'
-              label={question.answers[2]}
-              name='answer'
-              type='radio'
-              className='wrongAnswer'
-            />
-            <Divider />
-          </Form.Group>
-        ))}
-      </Form>
-      <Button>What's the score?!</Button>
-    </>
-  );
+	useEffect(
+		() => {
+			if (timeIsUp) {
+				sendAnswers();
+			}
+		},
+		[ timeIsUp ]
+	);
+
+	useEffect(
+		() => {
+			if (quizQuestions.length) {
+				quizQuestions.forEach((question) => {
+					answers.push({
+						questionId: question['questionId'],
+						questionAnswer: ''
+					});
+				});
+				setAnswers(answers);
+			}
+		},
+		[ quizQuestions ]
+	);
+
+	const setValueForQuestion = (value, index) => {
+		let aux = [ ...answers ];
+		aux[index]['questionAnswer'] = value;
+		setAnswers(aux);
+		setResultDetails({
+			...resultDetails,
+			answers: answers
+		});
+	};
+
+	const sendAnswers = () => {
+		setIsSolved(true);
+		fetch(`http://localhost:8080/api/results/test-results/add`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(resultDetails)
+		})
+			.then((data) => data.json())
+			.then((results) => {
+				setCheckingResults(false);
+				setResults(results);
+			})
+			.catch((error) => {
+				console.log(error);
+				setErrorResults(true);
+			});
+	};
+
+	return (
+		<React.Fragment>
+			<Form className="quizForm">
+				{quizQuestions.map((question, index) => (
+					<Form.Group grouped key={index} className="question">
+						<h5>
+							{index + 1}.) &nbsp;
+							{question['question']} - <i>{question['points']} points</i>
+						</h5>
+						<Form.Field
+							control="input"
+							label={question['correctAnswer']}
+							name={'answer' + index}
+							onChange={(e) => {
+								setValueForQuestion(e.target.value, index);
+							}}
+							value={question['correctAnswer']}
+							type="radio"
+						/>
+						<Form.Field
+							control="input"
+							label={question['firstWrongAnswer']}
+							name={'answer' + index}
+							onChange={(e) => {
+								setValueForQuestion(e.target.value, index);
+							}}
+							value={question['firstWrongAnswer']}
+							type="radio"
+						/>
+						<Form.Field
+							control="input"
+							label={question['secondWrongAnswer']}
+							name={'answer' + index}
+							onChange={(e) => {
+								setValueForQuestion(e.target.value, index);
+							}}
+							value={question['secondWrongAnswer']}
+							type="radio"
+						/>
+						<Divider />
+					</Form.Group>
+				))}
+			</Form>
+			<br />
+			<Button
+				onClick={() => {
+					setCheckingResults(true);
+					sendAnswers();
+				}}
+			>
+				What's the score?!
+			</Button>
+		</React.Fragment>
+	);
 };
 export default Quiz;

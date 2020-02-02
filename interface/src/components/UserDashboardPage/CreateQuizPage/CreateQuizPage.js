@@ -1,18 +1,20 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 
 import WrapperComponent from '../../WrapperComponent/WrapperComponent';
 
 import './CreateQuiz.css';
 
-import { Card, Container } from 'semantic-ui-react';
+import { Card, Container, Button } from 'semantic-ui-react';
 import QuizDetails from './QuizDetailsComponent';
 
-import { Context as DashboardContext } from '../../../Contexts/UserDashboardContext';
+import { Context as QuizContext } from '../../../Contexts/QuizPageContext';
+import Questions from './QuestionsComponent';
+import AddQuestion from './AddQuestionComponent';
 
 const CreateQuizPage = () => {
-	const dashboardContext = useContext(DashboardContext);
+	const quizContext = useContext(QuizContext);
 
-	const { quizDetailsFilled, quizQuestions } = dashboardContext;
+	const { quizDetailsFilled, quizQuestions } = quizContext;
 
 	return (
 		<WrapperComponent>
@@ -27,16 +29,19 @@ const CreateQuizPage = () => {
 					</Card>
 				</Container>
 			) : (
-				<Card.Group className="quizPage">
-					<Card className="quizDiv">
+				<Card.Group className="createQuizCards">
+					<Card className="quizQuestionsDiv">
 						<Card.Content>
 							<Card.Header>{'Questions'}</Card.Header>
 							<br />
-							{}
+							<Questions questions={quizQuestions} />
+							<br />
+							<Button>That's all</Button>
 						</Card.Content>
 					</Card>
-					<Card className="timerDiv">
-						<h3>Time</h3>
+					<Card className="addQuestionDiv">
+						<h3>Add question</h3>
+						<AddQuestion />
 					</Card>
 				</Card.Group>
 			)}

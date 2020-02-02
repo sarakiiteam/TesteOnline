@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 const Context = createContext();
 
-const Provider = ({ children }) => {
+const Provider = ({ children, history, location }) => {
 	const [ deviceWidth, setDeviceWidth ] = useState(window.innerWidth);
 	const [ deviceHeight, setDeviceHeight ] = useState(window.innerHeight);
 	const [ selectedQuiz, setSelectedQuiz ] = useState(null);
@@ -26,6 +26,8 @@ const Provider = ({ children }) => {
 				deviceWidth,
 				selectedQuiz,
 				hasAccount,
+				history,
+				location,
 
 				// METHODS
 				setSelectedQuiz,

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 
 import UserDetails from './UserDetails/UserDetailsForm';
 import WrapperComponent from '../WrapperComponent/WrapperComponent';
@@ -6,15 +6,14 @@ import Quiz from './QuizComponent/QuizComponent';
 
 import './QuizPage.css';
 
-import { Card, Container } from 'semantic-ui-react';
+import { Card, Container, Loader, Dimmer } from 'semantic-ui-react';
 import { Context as QuizPageContext } from '../../Contexts/QuizPageContext';
 import CountdownTimer from 'react-component-countdown-timer';
+import Result from './ResultComponent/Result';
 
 const QuizPage = () => {
 	const quizPageContext = useContext(QuizPageContext);
-	const { userDetailsFilled, quiz } = quizPageContext;
-
-	const { title, questions } = quiz;
+	const { userDetailsFilled, quizTitle, quizQuestions, isSolved, setTimeIsUp, checkingResults } = quizPageContext;
 
 	return (
 		<WrapperComponent>
@@ -32,25 +31,46 @@ const QuizPage = () => {
 				<Card.Group className="quizPage">
 					<Card className="quizDiv">
 						<Card.Content>
-							<Card.Header>{title}</Card.Header>
+							<Card.Header>{quizTitle}</Card.Header>
 							<br />
-							<Quiz />
+							{!isSolved ? (
+								<Quiz />
+							) : checkingResults ? (
+								<React.Fragment>
+									<br />
+									<br />
+									<br />
+									<Dimmer active inverted>
+										<Loader active inline="centered">
+											Checking your answers..
+										</Loader>
+									</Dimmer>
+									<br />
+									<br />
+									<br />
+									<br />
+								</React.Fragment>
+							) : (
+								<Result />
+							)}
 						</Card.Content>
 					</Card>
-					<Card className="timerDiv">
-						<h3>Time</h3>
-						<CountdownTimer
-							className="timer"
-							count={30 * questions.length}
-							hideDay
-							hideHours
-							size={30}
-							onEnd={() => {
-								// send data
-							}}
-							responsive={true}
-						/>
-					</Card>
+					{!isSolved && (
+						<Card className="timerDiv">
+							<h3>Time</h3>
+							<CountdownTimer
+								className="timer"
+								count={30 * quizQuestions.length}
+								hideDay
+								hideHours
+								size={30}
+								onEnd={() => {
+									setTimeIsUp(true);
+								}}
+								responsive={true}
+							/>
+						</Card>
+					)}
 				</Card.Group>
 			)}
 		</WrapperComponent>
