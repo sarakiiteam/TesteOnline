@@ -19,31 +19,56 @@ import RestrictedRoute from './components/RestrictedRoute/RestrictedRouteCompone
 import AddQuestionsPage from './components/UserDashboardPage/CreateQuizPage/AddQuestionsPage';
 import ResultsPage from './components/UserDashboardPage/CreateQuizPage/ResultsPage';
 
-const App = (props) => {
-	return (
-		<AppProvider {...props}>
-			{window.location.pathname !== '/home' && <MenuComponent {...props} />}
+const App = props => {
+  return (
+    <AppProvider {...props}>
+      <QuizProvider {...props}>
+        {window.location.pathname !== '/home' && <MenuComponent {...props} />}
 
-			<Switch>
-				<Route exact path="/">
-					<Redirect to="/home" />
-				</Route>
-				<Route path="/home" exact component={LandingPage} />
-				<Route path="/login" exact component={LoginPage} />
-				<QuizProvider {...props}>
-					{/* restricted routes, only if logged */}
-					<RestrictedRoute exact path="/update-profile" component={UpdateProfilePage} redirectTo="/login" />
-					<RestrictedRoute exact path="/create-quiz" component={CreateQuizPage} redirectTo="/login" />
-					<RestrictedRoute exact path="/user-quizzes" component={UserQuizzes} redirectTo="/login" />
-					<RestrictedRoute exact path="/quiz-results" component={ResultsPage} redirectTo="/login" />
-					<RestrictedRoute exact path="/add-questions" component={AddQuestionsPage} redirectTo="/login" />
-					{/* until here */}
-					<Route path="/solve-quiz" exact component={QuizzesPage} />
-					<Route path="/quiz" exact component={QuizPage} />
-				</QuizProvider>
-			</Switch>
-		</AppProvider>
-	);
+        <Switch>
+          <Route exact path='/'>
+            <Redirect to='/home' />
+          </Route>
+          <Route path='/home' exact component={LandingPage} />
+          <Route path='/login' exact component={LoginPage} />
+          {/* restricted routes, only if logged */}
+          <RestrictedRoute
+            exact
+            path='/update-profile'
+            component={UpdateProfilePage}
+            redirectTo='/login'
+          />
+          <RestrictedRoute
+            exact
+            path='/create-quiz'
+            component={CreateQuizPage}
+            redirectTo='/login'
+          />
+          <RestrictedRoute
+            exact
+            path='/user-quizzes'
+            component={UserQuizzes}
+            redirectTo='/login'
+          />
+          <RestrictedRoute
+            exact
+            path='/quiz-results'
+            component={ResultsPage}
+            redirectTo='/login'
+          />
+          <RestrictedRoute
+            exact
+            path='/add-questions'
+            component={AddQuestionsPage}
+            redirectTo='/login'
+          />
+          {/* until here */}
+          <Route path='/solve-quiz' exact component={QuizzesPage} />
+          <Route path='/quiz' exact component={QuizPage} />
+        </Switch>
+      </QuizProvider>
+    </AppProvider>
+  );
 };
 
 export default withRouter(App);

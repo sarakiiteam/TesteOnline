@@ -8,13 +8,23 @@ import { Card, Container, Button } from 'semantic-ui-react';
 import QuizDetails from './QuizDetailsComponent';
 
 import { Context as QuizContext } from '../../../Contexts/QuizPageContext';
+import { Context as AppContext } from '../../../Contexts/AppContext';
+
 import Questions from './QuestionsComponent';
 import AddQuestion from './AddQuestionComponent';
 
 const CreateQuizPage = () => {
   const quizContext = useContext(QuizContext);
+  const appContext = useContext(AppContext);
 
-  const { quizDetailsFilled, quizQuestions, quizTitle } = quizContext;
+  const {
+    quizDetailsFilled,
+    quizQuestions,
+    quizTitle,
+    setQuizDetailsFilled
+  } = quizContext;
+
+  const { history } = appContext;
 
   return (
     <WrapperComponent>
@@ -36,6 +46,14 @@ const CreateQuizPage = () => {
               <br />
               <Questions questions={quizQuestions} />
               <br />
+              <Button
+                onClick={() => {
+                  setQuizDetailsFilled(false);
+                  history.push('/user-quizzes');
+                }}
+              >
+                That's all
+              </Button>
             </Card.Content>
           </Card>
           <Card className='addQuestionDiv'>

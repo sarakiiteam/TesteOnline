@@ -11,8 +11,8 @@ const UserQuizzes = () => {
 
   useEffect(() => {
     fetch(
-      `http://localhost:8080/api/tests/users/,
-      ${sessionStorage.getItem('username')}`,
+      `http://localhost:8080/api/tests/users/`,
+      // ${sessionStorage.getItem('username')}`
       {
         method: 'GET',
         headers: {

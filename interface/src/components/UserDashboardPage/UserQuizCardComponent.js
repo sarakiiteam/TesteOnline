@@ -12,18 +12,27 @@ const UserQuizCard = ({ name, difficulty, description }) => {
   const quizContext = useContext(QuizContext);
 
   const { history } = appContext;
-  const { setQuizTitle } = quizContext;
+  const { setQuizTitle, setQuizQuestions } = quizContext;
+
+  const getQuiz = () => {
+    fetch(`http://localhost:8080/api/tests/${name}/questions`)
+      .then(data => data.json())
+      .then(parsedData => {
+        console.log(parsedData);
+        setQuizQuestions(parsedData['questions']);
+      })
+      .catch(error => console.log(error));
+  };
 
   return (
     <Card>
       <Card.Content>
         <Card.Header>{name}</Card.Header>
         <Card.Meta>
-          Difficulty:{' '}
           <span
             style={
               difficulty === 'EASY'
-                ? { color: 'light-green' }
+                ? { color: 'green' }
                 : difficulty === 'MEDIUM'
                 ? { color: 'orange' }
                 : difficulty === 'HARD'
@@ -52,7 +61,7 @@ const UserQuizCard = ({ name, difficulty, description }) => {
             basic
             color='black'
             onClick={() => {
-              // getQuiz();
+              getQuiz();
               history.push('/add-questions');
             }}
           >

@@ -10,12 +10,12 @@ import { Card, Table, Loader } from 'semantic-ui-react';
 
 const ResultsPage = () => {
   const [results, setResults] = useState([]);
-  const [quizName, setQuizName] = useState('da-test');
 
   const quizContext = useContext(QuizContext);
   const { quizTitle } = quizContext;
 
   useEffect(() => {
+    console.log(quizTitle);
     fetch(`http://localhost:8080/api/results/${quizTitle}`)
       .then(data => data.json())
       .then(parsedData => {
