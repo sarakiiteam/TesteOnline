@@ -1,18 +1,58 @@
 import React, { useContext, useState } from 'react';
 
-import { Form, Button, TextArea, Select } from 'semantic-ui-react';
+import { Form, Button, TextArea, Select, Message } from 'semantic-ui-react';
 import { Context as QuizContext } from '../../../Contexts/QuizPageContext';
 
 const QuizDetails = () => {
   const quizContext = useContext(QuizContext);
 
-  const { setQuizDetailsFilled } = quizContext;
+  const {
+    setQuizDetailsFilled,
+    setQuizTitle,
+    allQuizzes,
+    setAllQuizzes
+  } = quizContext;
   const [quizDetails, setQuizDetails] = useState({
-    name: '',
+    testName: '',
     difficulty: 'EASY',
-    description: ''
-    // username: '' get from localstorage
+    description: '',
+    username: sessionStorage.getItem('username')
   });
+
+  const [error, setError] = useState(false);
+
+  const handleAddTestDetails = () => {
+    console.log(quizDetails);
+    if (quizDetails.testName && quizDetails.description) {
+      fetch(`http://localhost:8080/api/tests/add`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(quizDetails)
+      })
+        .then(data => data.json())
+        .then(parsedData => {
+          if (parsedData['code'] === 'CREATED') {
+            setQuizTitle(quizDetails.testName);
+            setAllQuizzes([
+              ...allQuizzes,
+              {
+                name: quizDetails['testName'],
+                difficulty: quizDetails['difficulty'],
+                authorName: quizDetails['username'],
+                description: quizDetails['description']
+              }
+            ]);
+            setQuizDetailsFilled(true);
+            return;
+          }
+          console.log('---------Quiz creating error-----------');
+          setError(true);
+        })
+        .catch(error => console.log(error));
+    }
+  };
 
   const options = [
     {
@@ -40,12 +80,11 @@ const QuizDetails = () => {
           onChange={event =>
             setQuizDetails({
               ...quizDetails,
-              name: event.target.value
+              testName: event.target.value
             })
           }
         />
       </Form.Field>
-      {/* username to be took from localstorage (as token) */}
       <Form.Field>
         <Select
           placeholder='Difficulty'
@@ -70,11 +109,20 @@ const QuizDetails = () => {
         />
       </Form.Field>
       <br />
+      <Message
+        error
+        visible={error}
+        onDismiss={() => {
+          setError(false);
+        }}
+        content='The quiz has not been created!'
+        header='Error at creating the new quiz!'
+      />
+      <br />
       <Button
         type='submit'
         onClick={() => {
-          // TODO: validare campuri
-          setQuizDetailsFilled(true);
+          handleAddTestDetails();
         }}
       >
         To Questions!

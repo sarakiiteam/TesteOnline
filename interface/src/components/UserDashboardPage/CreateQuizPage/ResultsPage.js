@@ -4,14 +4,19 @@ import WrapperComponent from '../../WrapperComponent/WrapperComponent';
 
 import './CreateQuiz.css';
 
+import { Context as QuizContext } from '../../../Contexts/QuizPageContext';
+
 import { Card, Table, Loader } from 'semantic-ui-react';
 
 const ResultsPage = () => {
   const [results, setResults] = useState([]);
   const [quizName, setQuizName] = useState('da-test');
 
+  const quizContext = useContext(QuizContext);
+  const { quizTitle } = quizContext;
+
   useEffect(() => {
-    fetch(`http://localhost:8080/api/results/${quizName}`)
+    fetch(`http://localhost:8080/api/results/${quizTitle}`)
       .then(data => data.json())
       .then(parsedData => {
         setResults(parsedData['results']);

@@ -12,41 +12,40 @@ import Questions from './QuestionsComponent';
 import AddQuestion from './AddQuestionComponent';
 
 const CreateQuizPage = () => {
-	const quizContext = useContext(QuizContext);
+  const quizContext = useContext(QuizContext);
 
-	const { quizDetailsFilled, quizQuestions } = quizContext;
+  const { quizDetailsFilled, quizQuestions, quizTitle } = quizContext;
 
-	return (
-		<WrapperComponent>
-			{!quizDetailsFilled ? (
-				<Container className="userPage">
-					<Card>
-						<Card.Content>
-							<Card.Header>{'Quiz Details'}</Card.Header>
-							<br />
-							<QuizDetails />
-						</Card.Content>
-					</Card>
-				</Container>
-			) : (
-				<Card.Group className="createQuizCards">
-					<Card className="quizQuestionsDiv">
-						<Card.Content>
-							<Card.Header>{'Questions'}</Card.Header>
-							<br />
-							<Questions questions={quizQuestions} />
-							<br />
-							<Button>That's all</Button>
-						</Card.Content>
-					</Card>
-					<Card className="addQuestionDiv">
-						<h3>Add question</h3>
-						<AddQuestion />
-					</Card>
-				</Card.Group>
-			)}
-		</WrapperComponent>
-	);
+  return (
+    <WrapperComponent>
+      {!quizDetailsFilled ? (
+        <Container className='userPage'>
+          <Card>
+            <Card.Content>
+              <Card.Header>{'Quiz Details'}</Card.Header>
+              <br />
+              <QuizDetails />
+            </Card.Content>
+          </Card>
+        </Container>
+      ) : (
+        <Card.Group className='createQuizCards'>
+          <Card className='quizQuestionsDiv'>
+            <Card.Content>
+              <Card.Header>{quizTitle}</Card.Header>
+              <br />
+              <Questions questions={quizQuestions} />
+              <br />
+            </Card.Content>
+          </Card>
+          <Card className='addQuestionDiv'>
+            <h3>Add question</h3>
+            <AddQuestion />
+          </Card>
+        </Card.Group>
+      )}
+    </WrapperComponent>
+  );
 };
 
 export default CreateQuizPage;

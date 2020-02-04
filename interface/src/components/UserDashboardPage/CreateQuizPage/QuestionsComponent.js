@@ -15,9 +15,9 @@ const Questions = ({ questions }) => (
         </h5>
         <h6 />
         <ol>
-          <li className='correctAnswer'>{question['correctAnswer']}</li>
-          <li>{question['firstWrongAnswer']}</li>
-          <li>{question['secondWrongAnswer']}</li>
+          <li className='correctAnswer'>{question['answer']}</li>
+          <li>{question['wrong1']}</li>
+          <li>{question['wrong2']}</li>
         </ol>
         <Divider />
       </div>
