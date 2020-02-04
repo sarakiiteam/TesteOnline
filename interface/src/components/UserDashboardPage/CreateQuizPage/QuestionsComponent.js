@@ -16,8 +16,6 @@ const Questions = ({ questions }) => {
 						{index + 1}.) &nbsp;
 						{question['question']} - <i>{question['points']} points</i>
 					</h5>
-
-					<h6 />
 					<ol>
 						<li className="correctAnswer">{question['correctAnswer']}</li>
 						<li>{question['firstWrongAnswer']}</li>

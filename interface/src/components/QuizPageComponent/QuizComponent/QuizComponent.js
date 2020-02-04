@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 
-import { Form, Button, Divider, Radio } from 'semantic-ui-react';
+import { Form, Button, Divider } from 'semantic-ui-react';
 import { Context as QuizPageContext } from '../../../Contexts/QuizPageContext';
 
 import './QuizComponent.css';
@@ -19,11 +19,10 @@ const Quiz = () => {
 	} = quizPageContext;
 
 	const [ answers, setAnswers ] = useState([]);
-	const [ error, setError ] = useState(false);
 
 	useEffect(() => {
 		setIsSolved(false);
-	}, []);
+	});
 
 	useEffect(
 		() => {
@@ -31,6 +30,7 @@ const Quiz = () => {
 				sendAnswers();
 			}
 		},
+		//eslint-disable-next-line react-hooks/exhaustive-deps
 		[ timeIsUp ]
 	);
 
@@ -46,6 +46,7 @@ const Quiz = () => {
 				setAnswers(answers);
 			}
 		},
+		//eslint-disable-next-line react-hooks/exhaustive-deps
 		[ quizQuestions ]
 	);
 
@@ -60,9 +61,8 @@ const Quiz = () => {
 	};
 
 	const validateAnswers = () => {
-		answers.forEach((answer) => {
-			if (!answer) {
-				setError(true);
+		resultDetails.answers.forEach((answer) => {
+			if (!answer.questionAnswer) {
 				return false;
 			}
 		});
@@ -136,15 +136,6 @@ const Quiz = () => {
 				))}
 			</Form>
 			<br />
-			{/* <Message
-				error
-				visible={error}
-				onDismiss={() => {
-					setError(false);
-				}}
-				content="You have to answer to all the questions!"
-				header="Quizz is not completed!"
-			/> */}
 			<Button
 				onClick={() => {
 					setCheckingResults(true);

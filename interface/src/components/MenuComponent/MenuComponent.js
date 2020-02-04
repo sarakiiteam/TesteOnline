@@ -12,7 +12,7 @@ const MenuComponent = () => {
 	const quizContext = useContext(QuizContext);
 
 	const { history } = appContext;
-	const { setQuizQuestions } = quizContext;
+	const { setQuizQuestions, setResultDetails, resultDetails } = quizContext;
 
 	const [ activeItem, setActiveItem ] = useState('');
 
@@ -38,6 +38,10 @@ const MenuComponent = () => {
 						name="solve quiz"
 						active={activeItem === 'solve quiz'}
 						onClick={(e, { name }) => {
+							setResultDetails({
+								...resultDetails,
+								answers: []
+							});
 							setActiveItem(name);
 							history.push('/solve-quiz');
 						}}

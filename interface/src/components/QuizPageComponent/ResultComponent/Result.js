@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 
 import { Context as QuizContext } from '../../../Contexts/QuizPageContext/index';
 import { Segment, Divider } from 'semantic-ui-react';
@@ -33,7 +33,6 @@ const Result = () => {
 							<h5>
 								{question['question']} - <i>{question['points']} points</i>
 							</h5>
-							<h6 />
 							<ol>
 								<li className="correctAnswer">{question['correctAnswer']}</li>
 								<li>{question['firstWrongAnswer']}</li>
