@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Divider, Loader } from 'semantic-ui-react';
+import { Card, Divider, Loader, Segment } from 'semantic-ui-react';
 
 import WrapperComponent from '../WrapperComponent/WrapperComponent';
 
@@ -10,15 +10,12 @@ const UserQuizzes = () => {
 	const [ quizzes, setQuizzes ] = useState([]);
 
 	useEffect(() => {
-		fetch(
-			`http://localhost:8080/api/tests/users/${sessionStorage.getItem('username')}`,
-			{
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json'
-				}
+		fetch(`http://localhost:8080/api/tests/users/${sessionStorage.getItem('username')}`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
 			}
-		)
+		})
 			.then((data) => data.json())
 			.then((parsedData) => {
 				console.log(parsedData);
@@ -30,7 +27,7 @@ const UserQuizzes = () => {
 	return (
 		<WrapperComponent>
 			<Card.Group itemsPerRow={3} centered stackable className="quizzesStyle">
-				{quizzes ? (
+				{quizzes.length > 0 ? (
 					quizzes.map((quiz, index) => (
 						<UserQuizCard
 							key={index}
@@ -39,6 +36,8 @@ const UserQuizzes = () => {
 							description={quiz.description}
 						/>
 					))
+				) : quizzes.length === 0 ? (
+					<Segment>You have no quizzes created!</Segment>
 				) : (
 					<Loader active inline="centered">
 						Fetching your quizzes..

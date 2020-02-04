@@ -19,6 +19,7 @@ const Quiz = () => {
 	} = quizPageContext;
 
 	const [ answers, setAnswers ] = useState([]);
+	const [ error, setError ] = useState(false);
 
 	useEffect(() => {
 		setIsSolved(false);
@@ -58,24 +59,37 @@ const Quiz = () => {
 		});
 	};
 
+	const validateAnswers = () => {
+		answers.forEach((answer) => {
+			if (!answer) {
+				setError(true);
+				return false;
+			}
+		});
+		return true;
+	};
+
 	const sendAnswers = () => {
-		setIsSolved(true);
-		fetch(`http://localhost:8080/api/results/test-results/add`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(resultDetails)
-		})
-			.then((data) => data.json())
-			.then((results) => {
-				setCheckingResults(false);
-				setResults(results);
+		if (validateAnswers()) {
+			console.log(resultDetails);
+			setIsSolved(true);
+			fetch(`http://localhost:8080/api/results/test-results/add`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(resultDetails)
 			})
-			.catch((error) => {
-				console.log(error);
-				setErrorResults(true);
-			});
+				.then((data) => data.json())
+				.then((results) => {
+					setCheckingResults(false);
+					setResults(results);
+				})
+				.catch((error) => {
+					console.log(error);
+					setErrorResults(true);
+				});
+		}
 	};
 
 	return (
@@ -122,6 +136,15 @@ const Quiz = () => {
 				))}
 			</Form>
 			<br />
+			{/* <Message
+				error
+				visible={error}
+				onDismiss={() => {
+					setError(false);
+				}}
+				content="You have to answer to all the questions!"
+				header="Quizz is not completed!"
+			/> */}
 			<Button
 				onClick={() => {
 					setCheckingResults(true);
