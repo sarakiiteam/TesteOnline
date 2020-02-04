@@ -156,24 +156,13 @@ public class TestController {
 
         // filter the result
         final Map<String, List<Test>> userTests = new HashMap<>();
-        final List<Test> listx = testService.getFilteredTests(
-                test -> test
-                        .getUser()
-                        .getUsername()
-                        .equals(
-                                username.toLowerCase()
-                        )
-        ).stream().peek(x -> x.setUser(null)).collect(Collectors.toList());
-
         userTests.put(
                 "tests",
                 testService.getFilteredTests(
                         test -> test
                                 .getUser()
                                 .getUsername()
-                                .equals(
-                                        username.toLowerCase()
-                                )
+                                .equals(username)
                 ).stream().peek(x -> x.setUser(null)).collect(Collectors.toList())
         );
 

@@ -41,8 +41,7 @@ public class TestService extends ProxyCacher<ITestService> implements ITestServi
     @Override
     @VolatileCaches(
             value = {
-                    @VolatileCache(cacheUpdate = "getAllTests"),
-                    @VolatileCache(cacheUpdate = "getFilteredTests")
+                    @VolatileCache(cacheUpdate = "getAllTests")
             }
     )
     public synchronized void addTest(
@@ -59,8 +58,6 @@ public class TestService extends ProxyCacher<ITestService> implements ITestServi
     @VolatileCaches(
             value = {
                     @VolatileCache(cacheUpdate = "getAllAvailableAnswers"),
-                    @VolatileCache(cacheUpdate = "getQuestionsForTest"),
-                    @VolatileCache(cacheUpdate = "getFilteredTests")
             }
     )
     public synchronized void addQuestion(
@@ -92,11 +89,6 @@ public class TestService extends ProxyCacher<ITestService> implements ITestServi
 
 
     @Override
-    @Cached(
-            cacheName = "getQuestionsForTest",
-            cacheTime = 3600 * 24,
-            timeUnit = TTL.SECONDS
-    )
     public List<Question> getQuestionsForTest(final String testName) {
         final Optional<Test> testOptional = testRepository.getTestByName(testName);
         return testOptional
@@ -139,11 +131,6 @@ public class TestService extends ProxyCacher<ITestService> implements ITestServi
     }
 
     @Override
-    @Cached(
-            cacheName = "getFilteredTests",
-            cacheTime = 3600 * 24,
-            timeUnit = TTL.SECONDS
-    )
     public synchronized List<Test> getFilteredTests(final Predicate<Test> predicate) {
         return this
                 .asAbstractRepository(testRepository)

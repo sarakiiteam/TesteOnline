@@ -22,11 +22,10 @@ import java.util.*;
 import java.util.function.Predicate;
 
 @Component
-@Cacheable
 @ComponentScan(
         basePackages = {"config"}
 )
-public class ResultService extends ProxyCacher<IResultService> implements IResultService {
+public class ResultService implements IResultService {
 
     private final ITestRepository testRepository;
     private final IQuestionComparer questionComparer;
@@ -34,20 +33,13 @@ public class ResultService extends ProxyCacher<IResultService> implements IResul
     @Autowired
     public ResultService(
             final ITestRepository testRepository,
-            final IQuestionComparer questionComparer,
-            final ICacheResolver<IResultService> resolver) {
+            final IQuestionComparer questionComparer) {
 
-        super(resolver);
         this.testRepository = testRepository;
         this.questionComparer = questionComparer;
     }
 
     @Override
-    @VolatileCaches(
-            value = {
-                    @VolatileCache(cacheUpdate = "getTestResultsByCondition")
-            }
-    )
     public synchronized TestOverview addTestAndGetResult
             (final String testName,
              final String guestName, final List<Answer> answers) throws ErrorMessageException {
@@ -95,20 +87,10 @@ public class ResultService extends ProxyCacher<IResultService> implements IResul
 
 
     @Override
-    @Cached(
-            cacheName = "getTestResultsByCondition",
-            cacheTime = 3600 * 24,
-            timeUnit = TTL.SECONDS
-    )
     public synchronized List<TestResult> getTestResultsByCondition(
             final Predicate<TestResult> predicate) {
 
         return testRepository.getTestResultsByCondition(predicate);
-    }
-
-    @Override
-    protected IResultService getProxySource() {
-        return this;
     }
 
 
