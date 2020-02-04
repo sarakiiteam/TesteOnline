@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Divider } from 'semantic-ui-react';
+import { Card, Divider, Loader } from 'semantic-ui-react';
 
 import WrapperComponent from '../WrapperComponent/WrapperComponent';
 
@@ -11,8 +11,8 @@ const UserQuizzes = () => {
 
   useEffect(() => {
     fetch(
-      `http://localhost:8080/api/tests/users/`,
-      // ${sessionStorage.getItem('username')}`
+      `http://localhost:8080/api/tests/users/,
+      ${sessionStorage.getItem('username')}`,
       {
         method: 'GET',
         headers: {
@@ -31,14 +31,20 @@ const UserQuizzes = () => {
   return (
     <WrapperComponent>
       <Card.Group itemsPerRow={3} centered stackable className='quizzesStyle'>
-        {quizzes.map((quiz, index) => (
-          <UserQuizCard
-            key={index}
-            name={quiz.testName}
-            difficulty={quiz.testDifficulty}
-            description={quiz.description}
-          />
-        ))}
+        {quizzes ? (
+          quizzes.map((quiz, index) => (
+            <UserQuizCard
+              key={index}
+              name={quiz.testName}
+              difficulty={quiz.testDifficulty}
+              description={quiz.description}
+            />
+          ))
+        ) : (
+          <Loader active inline='centered'>
+            Fetching your quizzes..
+          </Loader>
+        )}
       </Card.Group>
       <Divider />
     </WrapperComponent>

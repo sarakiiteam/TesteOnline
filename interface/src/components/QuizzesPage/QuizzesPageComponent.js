@@ -71,7 +71,9 @@ const QuizzesPage = () => {
             );
           })
         ) : (
-          <Loader active inline='centered' />
+          <Loader active inline='centered'>
+            Fetching all the quizzes...
+          </Loader>
         )}
       </Card.Group>
       <Divider />
