@@ -28,17 +28,15 @@ import java.util.stream.Collectors;
 public class ResultController {
 
     private final IResultService resultService;
-    private final ITestService testService;
     private final IModelChecker modelChecker;
 
     @Autowired
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public ResultController(
-            final IModelChecker modelChecker, final IResultService resultService, final ITestService testService) {
+            final IModelChecker modelChecker, final IResultService resultService) {
 
         this.modelChecker = modelChecker;
-        this.resultService = ProxyCacher.getCacheable(resultService);
-        this.testService = ProxyCacher.getCacheable(testService);
+        this.resultService = resultService;
     }
 
     /**
